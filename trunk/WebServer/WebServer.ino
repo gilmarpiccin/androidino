@@ -10,9 +10,7 @@ byte mac[] = {
   0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
 IPAddress ip(192,168,1,177);// 
-IPAddress gateway(192,168,1, 1);
-IPAddress subnet(255, 255, 255, 0);
-IPAddress Dns(0, 0, 0, 0);
+
 EthernetServer server(80);
 void setup() {
 
@@ -21,20 +19,14 @@ void setup() {
     ; 
   }
 
-  if (!Ethernet.begin(mac))
-  {
+//  if (!Ethernet.begin(mac))
+//  {
     Serial.println("Requisição de DHCP falhou.");
-    Ethernet.begin(mac,ip,Dns,gateway,subnet);
-  }
+    Ethernet.begin(mac,ip);
+//  }
   server.begin();
   Serial.print("Servidor localizando em: ");
   Serial.println(Ethernet.localIP());
-
-  pinMode(53, OUTPUT);
-  if (!SD.begin(4)) {
-    Serial.println("Inicialização SD Falhou!");
-  }  
-  Serial.println("SD Inincializado com exito.");
 
 }
 
@@ -47,10 +39,9 @@ void loop() {
    
     boolean currentLineIsBlank = true; //Solicitação http termina com uma linha em branco
     String vars;
+    char msgTwitter[]="";
+    String tolken;
     byte varOnOff;
-
-    pinMode(13,OUTPUT);
-    pinMode(15,INPUT);
     
     while (client.connected()) {
       if (client.available()) {
@@ -63,7 +54,7 @@ void loop() {
         }
         else if (vars.endsWith("?TWITTER"))
           varOnOff=2;
-        else if (vars.endsWith("/led")) 
+        else if (vars.endsWith("?Tolken")) 
           varOnOff=3;
         else if (vars.endsWith("/on")) 
           varOnOff=4;        
@@ -78,13 +69,19 @@ void loop() {
             case 1:
               client.println(validaLogin(vars,lerArquivo("login.txt")));
               break;
-            case 2:
-              enviaTwitter("teste arduino");
+              
+            case 2://posta no twitter
+              tolken = lerArquivo("twitter.txt");
+              char tolken2 [55];
+              tolken.toCharArray(tolken2,55);
+              enviaTwitter("Teste com arduino",tolken2);
               break;
-            case 3:
-              client.println("<h1>Lendo LED..</h1>");
-              digitalWrite(13,!digitalRead(15));            
+              
+            case 3://grava o tolken do twitter no SD
+              tolken = vars.substring(vars.indexOf('$')+1,vars.indexOf("?"));
+              client.print(gravaArquivo("twitter.txt",tolken));
               break;
+              
             default: 
               client.println("<h1>Seja Bem Vindo ao Web Service AlarmeDuino.</h1>");
            }
@@ -106,25 +103,45 @@ void loop() {
 
 
 
-void gravaArquivo(char arquivo[],char texto []){
+
+void iniciaSD(){
+  pinMode(53, OUTPUT);
+  if (!SD.begin(4)) 
+    Serial.println("Inicialização SD Falhou!");
+  else  
+  Serial.println("SD Inincializado com exito.");
+}
+
+String gravaArquivo(char arquivo[],String texto){
   File myFile;
+  iniciaSD();
+  if (!SD.exists(arquivo)){
+    Serial.println("não existe arquivo");
+    return"Não Existe Arquivo";
+  }
   myFile = SD.open(arquivo, FILE_WRITE);
   
   if (myFile) {
     Serial.print("Escrevendo no arquivo: ");
     Serial.print(arquivo);
-
-    myFile.println(texto);
+    myFile.print(texto);
     myFile.close();
     Serial.println("Gravado com Sucesso.");
+    return "Garavado com Sucesso";
   } else {
     Serial.println("Erro ao Abrir: "  );
     Serial.print(arquivo);
+    return "Erro ao Abrir";
   }
-
 }
 
 String lerArquivo (char arquivo[]){
+  iniciaSD();
+  if (!SD.exists(arquivo)){
+    Serial.println("não existe arquivo");
+    return"";
+  }
+  
   Serial.println("Lendo Arquivo do SD");
   File myFile = SD.open(arquivo);
   String texto;
@@ -143,9 +160,11 @@ String lerArquivo (char arquivo[]){
     Serial.println('Erro ao Abrir' + arquivo);
     return "";
   }
-  texto.trim();
   return texto;
 }
+
+
+
 
 String validaLogin(String Android, String Arduino){
   String AdUsuario,AdSenha,ArUsuario,ArSenha;
@@ -173,8 +192,9 @@ String validaLogin(String Android, String Arduino){
   }
 }
 
-void enviaTwitter(char msg[]){
-  Twitter twitter("63860592-pOWE5ipMXcLyV8077glcdTe7oWAXMJjZoC7PjZz6l");  
+void enviaTwitter(char msg[],char tolken[]){
+  Serial.println(tolken);
+  Twitter twitter(tolken);  
 
   Serial.println("connecting ...");
   if (twitter.post(msg)) {
@@ -188,6 +208,6 @@ void enviaTwitter(char msg[]){
   } else {
     Serial.println("connection failed.");
   }
-
-
 }
+
+
