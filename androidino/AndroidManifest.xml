@@ -49,6 +49,25 @@
             </intent-filter>
         </activity>
         
+        <activity
+      	    
+            android:name=".Configuracao"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.Configuracao" /> <!-- Nome da Intençao -->
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".Twitter"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.Twitter" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
 
     </application>
 

@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 public class MenuInicial extends ListActivity {
 	//vetor do MENU
-	String classes[] = {"Sensor","Configurações"};
+	String classes[] = {"Sensor","Configuracao"};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

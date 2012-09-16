@@ -29,29 +29,6 @@ public class Login extends Activity implements View.OnClickListener{
         		
   }
 	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		
-		if (event.getAction() == KeyEvent.KEYCODE_ENTER) {
-			Toast.makeText(Login.this,  
-					Integer.toString(keyCode),
-					Toast.LENGTH_LONG).show();
-		}
-		
-		
-		Toast.makeText(Login.this,  
-				Integer.toString(keyCode),
-				Toast.LENGTH_LONG).show();
-		return super.onKeyDown(keyCode, event);
-	}
-
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
-		return super.onKeyUp(keyCode, event);
-	}
-		
-
 
 	public void onClick(View v) {
 		// com este método é possivel organivar todos s OnClick
