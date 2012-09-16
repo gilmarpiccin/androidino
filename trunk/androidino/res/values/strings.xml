@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Androidino</string>
+    <string name="usuario">Usuário</string>
+    <string name="senha">Senha</string>
+    
+    <string name="sgeral">Geral</string>
+    <string name="smovimeto">Movimento</string>
+    <string name="scontato">Contato</string>
+    <string name="sair">Sair</string>
+    
+
+</resources>

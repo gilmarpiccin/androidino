@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/txtUsuario"
+        android:text="@string/usuario"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    />
+        	
+   <EditText
+        android:id="@+id/edtUsuario"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:nextFocusDown="@+id/edtSenha"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+   <TextView
+       android:id="@+id/txtSenha"
+       android:text="@string/senha"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       />
+
+    <EditText
+        android:id="@+id/edtSenha"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword" 
+    />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:text="Logar"
+        android:nextFocusUp="@+id/edtUsuario"
+        android:imeOptions="actionNext"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+         
+     />
+
+</LinearLayout>
