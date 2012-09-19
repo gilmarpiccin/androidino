@@ -1,213 +1,87 @@
-
 #include <SPI.h>
 #include <Ethernet.h>
-#include <SD.h>
-#if defined(ARDUINO) && ARDUINO > 18
-#endif
-#include <Twitter.h>
 
-byte mac[] = { 
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-
-IPAddress ip(192,168,1,177);// 
+byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };// MAC do Arduino
+IPAddress ip(192,168,1,177);// IP FIXO
 
 EthernetServer server(80);
 void setup() {
-
-  Serial.begin(9600);
+  Serial.begin(9600);//Inicia a comunicação Serial
   while (!Serial) {
-    ; 
+    ; //Fica no laço enquanto não estabelece a comunicação Serial
   }
 
-//  if (!Ethernet.begin(mac))
+//  if (!Ethernet.begin(mac))//Usar o DHCP para procurar IP
 //  {
     Serial.println("Requisição de DHCP falhou.");
     Ethernet.begin(mac,ip);
 //  }
-  server.begin();
+  server.begin();//Iniciando o servidor
   Serial.print("Servidor localizando em: ");
   Serial.println(Ethernet.localIP());
-
 }
 
-
 void loop() {
-
-  EthernetClient client = server.available();
+  
+  EthernetClient client = server.available();// Criando um Cliente
   if (client) {
-    Serial.println("novo cliente");
-   
-    boolean currentLineIsBlank = true; //Solicitação http termina com uma linha em branco
-    String vars;
-    char msgTwitter[]="";
-    String tolken;
-    byte varOnOff;
+    Serial.println("Novo cliente");
+    boolean bLinhaBranco = true; //Solicitação http termina com uma linha em branco
+    String sURL;
+    byte byOpcao;
     
     while (client.connected()) {
       if (client.available()) {
-        char c = client.read();
-        Serial.write(c);
-        vars.concat(c);
+        char cAux = client.read();
+        Serial.write(cAux);
+        sURL.concat(cAux);//Concatenando caracter a caracter na String
         
-        if (vars.endsWith("?Login")){
-          varOnOff=1;
-        }
-        else if (vars.endsWith("?TWITTER"))
-          varOnOff=2;
-        else if (vars.endsWith("?Tolken")) 
-          varOnOff=3;
-        else if (vars.endsWith("/on")) 
-          varOnOff=4;        
+        if (sURL.endsWith("?LOGIN"))
+          byOpcao = 1;
+        else if (sURL.endsWith("?TWITTER"))
+          byOpcao = 2;
+        else if (sURL.endsWith("?TOLKEN")) 
+          byOpcao = 3;
+        else if (sURL.endsWith("/on")) 
+          byOpcao = 4;  
+          
         //Se Chegou for quebra de linha E a linha esta em branco
-        if (c == '\n' && currentLineIsBlank) {
+        if (cAux == '\n' && bLinhaBranco) {
+          //Monta o cabeçalho de retorno para o browser
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
           client.println("Connnection: close");
           client.println();
           
-           switch (varOnOff) {
-            case 1:
-              client.println(validaLogin(vars,lerArquivo("login.txt")));
+           switch (byOpcao) {
+            case 1://Login
+              client.print(validaLogin(sURL,lerArquivoSD("login.txt")));
               break;
               
             case 2://posta no twitter
-              tolken = lerArquivo("twitter.txt");
-              char tolken2 [55];
-              tolken.toCharArray(tolken2,55);
-              enviaTwitter("Teste com arduino",tolken2);
+              enviaTwitter("Teste com arduino");//Enviado Mensagem para Twitter
               break;
               
             case 3://grava o tolken do twitter no SD
-              tolken = vars.substring(vars.indexOf('$')+1,vars.indexOf("?"));
-              client.print(gravaArquivo("twitter.txt",tolken));
+              client.print(gravaTolken(sURL));
               break;
               
             default: 
-              client.println("<h1>Seja Bem Vindo ao Web Service AlarmeDuino.</h1>");
+              client.print("<h1>Seja Bem Vindo ao Web Service AlarmeDuino.</h1>");
            }
           break;
         }
-        if (c == '\n') {
-          currentLineIsBlank = true;
-        } 
-        else if (c != '\r') {
-          currentLineIsBlank = false;
-        }
+        if (cAux == '\n')
+          bLinhaBranco = true;
+        else if (cAux != '\r')
+          bLinhaBranco = false;
       }
     }
-    delay(2000);
+    delay(2000);// Da tempo para o browser receber a resposta
     client.stop();
     Serial.println("Cliente Desconectado");
   }
 }
 
-
-
-
-void iniciaSD(){
-  pinMode(53, OUTPUT);
-  if (!SD.begin(4)) 
-    Serial.println("Inicialização SD Falhou!");
-  else  
-  Serial.println("SD Inincializado com exito.");
-}
-
-String gravaArquivo(char arquivo[],String texto){
-  File myFile;
-  iniciaSD();
-  if (!SD.exists(arquivo)){
-    Serial.println("não existe arquivo");
-    return"Não Existe Arquivo";
-  }
-  myFile = SD.open(arquivo, FILE_WRITE);
-  
-  if (myFile) {
-    Serial.print("Escrevendo no arquivo: ");
-    Serial.print(arquivo);
-    myFile.print(texto);
-    myFile.close();
-    Serial.println("Gravado com Sucesso.");
-    return "Garavado com Sucesso";
-  } else {
-    Serial.println("Erro ao Abrir: "  );
-    Serial.print(arquivo);
-    return "Erro ao Abrir";
-  }
-}
-
-String lerArquivo (char arquivo[]){
-  iniciaSD();
-  if (!SD.exists(arquivo)){
-    Serial.println("não existe arquivo");
-    return"";
-  }
-  
-  Serial.println("Lendo Arquivo do SD");
-  File myFile = SD.open(arquivo);
-  String texto;
-  if (myFile) {
-      while (myFile.available()) {
-       char a = myFile.read();
-       Serial.write(a);    
-       texto.concat(a);
-    }
-    
-    Serial.println("Fechando o arquivo");
-    delay(3000);
-    Serial.println(texto);
-    myFile.close();
-  } else {
-    Serial.println('Erro ao Abrir' + arquivo);
-    return "";
-  }
-  return texto;
-}
-
-
-
-
-String validaLogin(String Android, String Arduino){
-  String AdUsuario,AdSenha,ArUsuario,ArSenha;
-
-  AdUsuario = Android.substring(Android.indexOf('$')+1,Android.indexOf('&'));
-  Serial.println("\nlendo Usuario Android:");
-  Serial.println(AdUsuario);
-  AdSenha = Android.substring(Android.indexOf('&')+1,Android.indexOf("?"));
-  Serial.println("lendo senha Android:");
-  Serial.println(AdSenha);
-  
-  ArUsuario = Arduino.substring(0,Arduino.indexOf(';'));
-  Serial.println("\nlendo Usuario Arduino:");
-  Serial.println(ArUsuario);
-  ArSenha = Arduino.substring(Arduino.indexOf(';')+1,Arduino.length());
-  Serial.println("lendo senha Arduino:");
-  Serial.println(ArSenha);
-
-  if ((AdUsuario == ArUsuario) && (AdSenha== ArSenha)){
-    Serial.println("True");
-    return "True";
-  }else{
-    Serial.println("False");
-    return "False";
-  }
-}
-
-void enviaTwitter(char msg[],char tolken[]){
-  Serial.println(tolken);
-  Twitter twitter(tolken);  
-
-  Serial.println("connecting ...");
-  if (twitter.post(msg)) {
-    int status = twitter.wait(&Serial);
-    if (status == 200) {
-      Serial.println("OK.");
-    } else {
-      Serial.print("failed : code ");
-      Serial.println(status);
-    }
-  } else {
-    Serial.println("connection failed.");
-  }
-}
 
 
