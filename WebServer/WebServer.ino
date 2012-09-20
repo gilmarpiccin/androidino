@@ -4,7 +4,7 @@
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };// MAC do Arduino
 IPAddress ip(192,168,1,177);// IP FIXO
 
-EthernetServer server(80);
+EthernetServer server(8080);
 void setup() {
   Serial.begin(9600);//Inicia a comunicação Serial
   while (!Serial) {
@@ -42,7 +42,7 @@ void loop() {
           byOpcao = 2;
         else if (sURL.endsWith("?TOLKEN")) 
           byOpcao = 3;
-        else if (sURL.endsWith("/on")) 
+        else if (sURL.endsWith("/REDSENHA")) 
           byOpcao = 4;  
           
         //Se Chegou for quebra de linha E a linha esta em branco
