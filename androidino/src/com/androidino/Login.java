@@ -1,10 +1,8 @@
 package com.androidino;
 
-import android.R.string;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,17 +11,13 @@ import android.widget.Toast;
 public class Login extends Activity implements View.OnClickListener{
 	Button btnLogin;
 	EditText edtUsuario,edtSenha;
-	
-	
+		
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
-      
         //inicializando componentes
         inicializandoComponentes();
-             
         //inserindo os evento
         btnLogin.setOnClickListener(this);
         		
@@ -37,27 +31,26 @@ public class Login extends Activity implements View.OnClickListener{
 		 
 		case R.id.btnLogin:
 			
-			WebService ws = new  WebService("http://192.168.1.177/$" + 
+			WebService ws = new  WebService("http://192.168.1.177:8080/$" + 
 											edtUsuario.getText().toString() + 
 											"&" + 
 											edtSenha.getText().toString() + 
-											"?Login");
+											"?LOGIN");
 			String login = ws.getRequisicao();
 			login = login.replaceAll("\n","");
 			if(Boolean.parseBoolean(login)){
+				
 				Intent AbrirMenu = new Intent("android.intent.action.MENUINICIAL");
 				startActivity(AbrirMenu);
+				enviarParametro(AbrirMenu);
 				
 			}else{
 			//criando uma Torrada
 			Toast.makeText(Login.this, 
 					"Login ou Senha incorreta!",
 					Toast.LENGTH_LONG).show();
-	
-			
 			break;
 			}
-		
 		}
 		
 	}
@@ -77,5 +70,11 @@ public class Login extends Activity implements View.OnClickListener{
 		finish();
 	}	
 	
-	
+	public void enviarParametro(Intent intencao ){
+		Bundle parametro = new Bundle();
+		parametro.putString("usuario",edtUsuario.getText().toString());
+		parametro.putString("senha",edtSenha.getText().toString());
+		intencao.putExtras(parametro);
+		startActivity(intencao);
+	}
 }

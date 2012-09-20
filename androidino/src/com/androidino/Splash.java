@@ -16,7 +16,7 @@ public class Splash extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 		
-		MinhaMusica = MediaPlayer.create(Splash.this, R.raw.farraue);
+		MinhaMusica = MediaPlayer.create(Splash.this, R.raw.splash);
 		MinhaMusica.start();
 		
 		Thread timer = new Thread(){
@@ -27,7 +27,7 @@ public class Splash extends Activity{
 				
 				try 
 				{
-					sleep(5000);
+					sleep(3000);
 				} catch (InterruptedException e) {
 					e.getStackTrace();
 				}
