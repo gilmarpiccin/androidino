@@ -27,3 +27,11 @@ String validaLogin(String sAndroid, String sArduino){
     return "False";
   }
 }
+
+String redefineSenha(String sURL){
+  String sUsuario = sURL.substring(sURL.indexOf('$')+1,sURL.indexOf('&'));
+  String sNovaSenha = sURL.substring(sURL.indexOf('&')+1,sURL.indexOf("?"));
+//  grava a nova senha concatennado o usuario;senha
+  return gravaArquivoSD("login.txt",sUsuario + ";" + sNovaSenha);
+
+}

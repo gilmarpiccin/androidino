@@ -15,11 +15,8 @@ void iniciaSD(){
 String gravaArquivoSD(char cArquivo[],String sTexto){
   File flFile;
   iniciaSD();
-  if (!SD.exists(cArquivo)){
-    Serial.println("Não existe arquivo.");
-    return"Não Existe Arquivo.";
-  }
-  flFile = SD.open(cArquivo, FILE_WRITE);
+  SD.remove(cArquivo);//Apaga o arquivo para gravar em cima sempre 1 registro
+  flFile = SD.open(cArquivo, FILE_WRITE);//Se não existe cria o arqruivo
   
   if (flFile) {
     Serial.print("Escrevendo no arquivo: ");
