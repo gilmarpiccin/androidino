@@ -3,6 +3,7 @@
 
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };// MAC do Arduino
 IPAddress ip(192,168,1,177);// IP FIXO
+boolean bpresenca,btemperatura,bfogo;
 
 EthernetServer server(8080);
 void setup() {
@@ -19,10 +20,27 @@ void setup() {
   server.begin();//Iniciando o servidor
   Serial.print("Servidor localizando em: ");
   Serial.println(Ethernet.localIP());
-}
 
+ //Sensor DHT
+  btemperatura = inicDHT();    
+  //Sensor Presença
+  bpresenca = false;
+  pinMode(15,INPUT);//Entrada
+  pinMode(40,OUTPUT);digitalWrite(40,LOW);
+  //Sensor fogo
+  bfogo = false;
+  pinMode(16,INPUT);
+  pinMode(40,OUTPUT);digitalWrite(40,LOW);
+
+}
 void loop() {
-  
+  if (bpresenca)
+    digitalWrite(40,digitalRead(15)); 
+  if (btemperatura)
+    sensorTemperatura();
+  if (bfogo)
+    digitalWrite(40,digitalRead(16)); 
+    
   EthernetClient client = server.available();// Criando um Cliente
   if (client) {
     Serial.println("Novo cliente");
@@ -42,8 +60,14 @@ void loop() {
           byOpcao = 2;
         else if (sURL.endsWith("?TOLKEN")) 
           byOpcao = 3;
-        else if (sURL.endsWith("/REDSENHA")) 
+        else if (sURL.endsWith("?REDESENHA")) 
           byOpcao = 4;  
+        else if (sURL.endsWith("?DHT")) 
+          byOpcao = 5;  
+        else if (sURL.endsWith("?PRESENCA")) 
+          byOpcao = 6;  
+        else if (sURL.endsWith("?FOGO")) 
+          byOpcao = 7;  
           
         //Se Chegou for quebra de linha E a linha esta em branco
         if (cAux == '\n' && bLinhaBranco) {
@@ -65,7 +89,20 @@ void loop() {
             case 3://grava o tolken do twitter no SD
               client.print(gravaTolken(sURL));
               break;
-              
+            case 4://Redefinir Senha
+              client.print(redefineSenha(sURL));
+              break;
+            case 5://Sensor Tempeatura
+              btemperatura =!btemperatura;
+              client.print(sensorTemperatura());
+              break;
+            case 6://Sensor Presenca
+              bpresenca = !bpresenca;
+              client.print("");
+              break;
+            case 7://Sensor Fogo
+              bfogo = !bfogo;
+              break;
             default: 
               client.print("<h1>Seja Bem Vindo ao Web Service AlarmeDuino.</h1>");
            }
