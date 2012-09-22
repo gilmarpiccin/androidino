@@ -4,10 +4,14 @@
     <string name="usuario">Usuário</string>
     <string name="senha">Senha</string>
     
-    <string name="sgeral">Geral</string>
-    <string name="smovimeto">Movimento</string>
-    <string name="scontato">Contato</string>
-    <string name="sair">Sair</string>
+    <string name="sensorLegenda">Sensor de:</string>
+    <string name="sensorGeral">Geral</string>
+    <string name="sensorMovimeto">Movimento</string>
+    <string name="sensorFogo">Fogo</string>
+    <string name="sensorTemp">Temperatura</string>
+    <string name="ligaTodo">Ligar Todos</string>
+    <string name="desligaTodo">Desligar Todos</string>
+    
     
     <string name="confTwitter">Conf. Twitter</string>
     <string name="enviaTolken">Enviar Tolken Twitter</string>

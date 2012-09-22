@@ -1,16 +1,19 @@
 package com.androidino;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.RemoteViews.ActionException;
 
 public class Login extends Activity implements View.OnClickListener{
 	Button btnLogin;
 	EditText edtUsuario,edtSenha;
+	Validacao vl = new Validacao();
 		
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,7 @@ public class Login extends Activity implements View.OnClickListener{
 		switch (v.getId()){
 		 
 		case R.id.btnLogin:
-			
+			vl.msgEspera("Carregando...","Aguarde",this);
 			WebService ws = new  WebService("http://192.168.1.177:8080/$" + 
 											edtUsuario.getText().toString() + 
 											"&" + 
@@ -41,11 +44,14 @@ public class Login extends Activity implements View.OnClickListener{
 			if(Boolean.parseBoolean(login)){
 				
 				Intent AbrirMenu = new Intent("android.intent.action.MENUINICIAL");
+				vl.carregaCampos(edtUsuario.getText().toString(), edtSenha.getText().toString());
+				vl.enviarParametro(AbrirMenu);
 				startActivity(AbrirMenu);
-				enviarParametro(AbrirMenu);
+				
 				
 			}else{
 			//criando uma Torrada
+			ws.notify();
 			Toast.makeText(Login.this, 
 					"Login ou Senha incorreta!",
 					Toast.LENGTH_LONG).show();
@@ -70,11 +76,4 @@ public class Login extends Activity implements View.OnClickListener{
 		finish();
 	}	
 	
-	public void enviarParametro(Intent intencao ){
-		Bundle parametro = new Bundle();
-		parametro.putString("usuario",edtUsuario.getText().toString());
-		parametro.putString("senha",edtSenha.getText().toString());
-		intencao.putExtras(parametro);
-		startActivity(intencao);
-	}
 }

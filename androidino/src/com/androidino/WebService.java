@@ -13,6 +13,8 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.util.Log;
 
 public class WebService {
@@ -66,5 +68,9 @@ public class WebService {
 	        
 	        return parserbuilder;    
 	    }
+	    
+		public void msgEspera(String msg, Activity tela){
+			ProgressDialog dialog = ProgressDialog.show(tela, "", msg, true);
+			}
 	
 }
