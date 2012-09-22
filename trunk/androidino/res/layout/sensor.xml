@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+        
         <ToggleButton
             android:id="@+id/tgbGeral"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textOff="@string/sgeral"
-            android:textOn="@string/sgeral" />
+            android:textOff="@string/ligaTodo"
+            android:textOn="@string/desligaTodo" />
+        <TextView
+            android:id="@+id/txtSensorLegenda"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sensorLegenda" />               
+        
+        <ToggleButton
+            android:id="@+id/tgbTemperatura"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textOff="@string/sensorTemp"
+            android:textOn="@string/sensorTemp" />
 
         <ToggleButton
             android:id="@+id/tgbMovimento"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textOff="@string/smovimeto"
-            android:textOn="@string/smovimeto" />
+            android:textOff="@string/sensorMovimeto"
+            android:textOn="@string/sensorMovimeto" />
 
         <ToggleButton
-            android:id="@+id/tgbContato"
+            android:id="@+id/tgbFogo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textOff="@string/scontato"
-            android:textOn="@string/scontato" />
+            android:textOff="@string/sensorFogo"
+            android:textOn="@string/sensorFogo" />
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+
         
-        <Button 
-            android:id="@+id/btnSair"
-            android:text="@string/sair"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-         />
 
 </LinearLayout>
