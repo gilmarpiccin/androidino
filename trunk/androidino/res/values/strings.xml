@@ -22,4 +22,7 @@
 	<string name="confirmarSenha">Confirmar Nova Senha:</string>
 	<string name="btnconfirmarSenha">Confirmar</string>
 	
+	<string name="comuEnderecoIP">IP ou Endereco de rede:</string>
+	<string name="comuPorta">Porta:</string>
+	<string name="comuConfirma">Confirmar</string>
 </resources>
