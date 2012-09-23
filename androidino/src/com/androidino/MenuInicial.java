@@ -33,7 +33,7 @@ public class MenuInicial extends ListActivity {
 		String classeSelecionada = classes [position];
 		//tratamento de acentuação
 		if (classeSelecionada =="Configuração")
-			classeSelecionada = "Configuracao";
+			classeSelecionada = "MenuConfiguracao";
 		
 		try 
 		{	
