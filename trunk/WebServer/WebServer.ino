@@ -1,11 +1,17 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
+byte DHT = 14;
+byte PRES = 15;
+byte FOGO = 16;
+byte SIRE = 40;
+
+boolean OnOFF = false;
+
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };// MAC do Arduino
 IPAddress ip(192,168,1,177);// IP FIXO
-boolean bpresenca,btemperatura,bfogo;
-
 EthernetServer server(8080);
+
 void setup() {
   Serial.begin(9600);//Inicia a comunicação Serial
   while (!Serial) {
@@ -22,25 +28,20 @@ void setup() {
   Serial.println(Ethernet.localIP());
 
  //Sensor DHT
-  btemperatura = inicDHT();    
+  iniciaDHT(DHT);
   //Sensor Presença
-  bpresenca = false;
-  pinMode(15,INPUT);//Entrada
-  pinMode(40,OUTPUT);digitalWrite(40,LOW);
+  iniciaSensor(PRES);
   //Sensor fogo
-  bfogo = false;
-  pinMode(16,INPUT);
-  pinMode(40,OUTPUT);digitalWrite(40,LOW);
+  iniciaSensor(FOGO);
+  //inicia sirene  
+  iniciaSensor(SIRE);
 
 }
+
 void loop() {
-  if (bpresenca)
-    digitalWrite(40,digitalRead(15)); 
-  if (btemperatura)
-    sensorTemperatura();
-  if (bfogo)
-    digitalWrite(40,digitalRead(16)); 
-    
+  //Varrendo As portas do ALARME 
+  Alarme();
+  
   EthernetClient client = server.available();// Criando um Cliente
   if (client) {
     Serial.println("Novo cliente");
@@ -58,7 +59,7 @@ void loop() {
           byOpcao = 1;
         else if (sURL.endsWith("?TWITTER"))
           byOpcao = 2;
-        else if (sURL.endsWith("?TOLKEN")) 
+        else if (sURL.endsWith("?TOKEN")) 
           byOpcao = 3;
         else if (sURL.endsWith("?REDESENHA")) 
           byOpcao = 4;  
@@ -67,7 +68,9 @@ void loop() {
         else if (sURL.endsWith("?PRESENCA")) 
           byOpcao = 6;  
         else if (sURL.endsWith("?FOGO")) 
-          byOpcao = 7;  
+          byOpcao = 7;
+        else if (sURL.endsWith("?ONOFF")) 
+          byOpcao = 8;    
           
         //Se Chegou for quebra de linha E a linha esta em branco
         if (cAux == '\n' && bLinhaBranco) {
@@ -87,24 +90,31 @@ void loop() {
               break;
               
             case 3://grava o tolken do twitter no SD
-              client.print(gravaTolken(sURL));
+              client.print(gravaToken(sURL));
               break;
+              
             case 4://Redefinir Senha
               client.print(redefineSenha(sURL));
               break;
+              
             case 5://Sensor Tempeatura
-              btemperatura =!btemperatura;
-              client.print(sensorTemperatura());
+              
+              client.print("Sensor de Temperatura "+ sensorOnOFF(DHT));
               break;
+              
             case 6://Sensor Presenca
-              bpresenca = !bpresenca;
+              client.print("Sensor de Presença "+ sensorOnOFF(PRES));
+              break;
+              
+            case 7://Sensor Fogo
+              client.print("Sensor de FOGO "+ sensorOnOFF(FOGO));
+              break;
+              
+             case 8://Sensor LigaAlarme
               client.print("");
               break;
-            case 7://Sensor Fogo
-              bfogo = !bfogo;
-              break;
             default: 
-              client.print("<h1>Seja Bem Vindo ao Web Service AlarmeDuino.</h1>");
+              client.print("<h1>Seja Bem Vindo ao Web Server AndroiDino!</h1>");
            }
           break;
         }
@@ -120,5 +130,8 @@ void loop() {
   }
 }
 
-
-
+void Alarme(){
+  sensorTemperatura();
+  digitalWrite(SIRE,digitalRead(PRES));   
+  digitalWrite(SIRE,digitalRead(FOGO));
+}

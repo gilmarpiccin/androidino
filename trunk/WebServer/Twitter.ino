@@ -7,14 +7,14 @@ Serviço Twitter
 #include <Twitter.h>
 
 void enviaTwitter(char sMsg[]){
-  String sTolken = lerArquivoSD("twitter.txt");// Lendo Tolken gravado no arquivo twitter.txt
-  int iTamVar= sTolken.length();
-  char cTolken [iTamVar];
+  String sToken = lerArquivoSD("twitter.txt");// Lendo Tolken gravado no arquivo twitter.txt
+  int iTamVar= sToken.length();
+  char cToken [iTamVar];
 
-  sTolken.toCharArray(cTolken,iTamVar);//Converte String para Char
+  sToken.toCharArray(cToken,iTamVar);//Converte String para Char
   
-  Serial.println(cTolken);
-  Twitter twitter(cTolken);  
+  Serial.println(cToken);
+  Twitter twitter(cToken);  
 
   Serial.println("connecting ...");
   if (twitter.post(sMsg)) {
@@ -30,8 +30,8 @@ void enviaTwitter(char sMsg[]){
   }
 }
 
-String gravaTolken (String sURL){
+String gravaToken (String sURL){
   //$dnakjn?GravaTolken
-  String sTolken = sURL.substring(sURL.indexOf('$')+1,sURL.indexOf("?"));
-  return gravaArquivoSD("twitter.txt",sTolken);
+  String sToken = sURL.substring(sURL.indexOf('$')+1,sURL.indexOf("?"));
+  return gravaArquivoSD("twitter.txt",sToken);
 }
