@@ -10,7 +10,7 @@ import android.widget.ListView;
 public class MenuInicial extends ListActivity {
 	//vetor do MENU
 	String classes[] = {"Sensor","Configuração"};
-	Validacao vl = new Validacao();
+	Mensagem vl = new Mensagem();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +21,6 @@ public class MenuInicial extends ListActivity {
 						classes)//layout interno do android 
 		);
 
-		//parametros vindos da tela de Login
-		Intent intencao = getIntent();
-		vl.receParamLogin(intencao);
 	}
 	
 	
@@ -39,7 +36,6 @@ public class MenuInicial extends ListActivity {
 		{	
 			Class NossaClasse = Class.forName("com.androidino."+ classeSelecionada);
 			Intent  ClasseParaAbrir = new Intent(MenuInicial.this,NossaClasse);
-			vl.enviarParametro(ClasseParaAbrir);
 			startActivity(ClasseParaAbrir);
 			
 		} catch (ClassNotFoundException  e) {

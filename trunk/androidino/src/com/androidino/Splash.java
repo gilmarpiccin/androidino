@@ -3,6 +3,7 @@ package com.androidino;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -15,7 +16,7 @@ public class Splash extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
-		
+	
 		MinhaMusica = MediaPlayer.create(Splash.this, R.raw.splash);
 		MinhaMusica.start();
 		

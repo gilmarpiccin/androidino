@@ -11,7 +11,7 @@ public class MenuConfiguracao extends ListActivity {
 	//vetor do MENU
 		String classes[] = {"Redefinir Senha","Twitter","Comunicação"};
 		
-		Validacao vl = new Validacao();
+		Mensagem vl = new Mensagem();
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
@@ -20,8 +20,6 @@ public class MenuConfiguracao extends ListActivity {
 							android.R.layout.simple_expandable_list_item_1,
 							classes)//layout interno do android 
 			);
-			Intent intencao = getIntent();
-			vl.receParamLogin(intencao);
 		}
 		
 		@Override
@@ -39,7 +37,6 @@ public class MenuConfiguracao extends ListActivity {
 			{	
 				Class NossaClasse = Class.forName("com.androidino."+ classeSelecionada);
 				Intent  ClasseParaAbrir = new Intent(MenuConfiguracao.this,NossaClasse);
-				vl.enviarParametro(ClasseParaAbrir);
 				startActivity(ClasseParaAbrir);
 				
 			} catch (ClassNotFoundException  e) {

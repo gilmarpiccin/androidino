@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <EditText
-        android:id="@+id/edtTolken"
+        android:id="@+id/edtToken"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10" >
@@ -14,15 +14,15 @@
     </EditText>
 
     <Button
-        android:id="@+id/btnEnviaTolken"
+        android:id="@+id/btnEnviaToken"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/enviaTolken" />
+        android:text="@string/enviaToken" />
      
      <Button
-        android:id="@+id/btnGerarTolken"
+        android:id="@+id/btnGerarToken"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/gerarTolken" />
+        android:text="@string/gerarToken" />
 
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.androidino;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,24 +14,20 @@ import android.widget.Toast;
 
 public class Twitter extends Activity implements View.OnClickListener{
 	
-	EditText edtTolken;
-	Button btnEnviaTolken,btnGerarTolken;
-	Validacao vl = new Validacao();
+	private EditText edtToken;
+	private Button btnEnviaToken,btnGerarToken;
+	private Mensagem ms;
+	private WebService ws;
+	private SharedPreferences preferencia;
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.twitter);
-				
-		edtTolken = (EditText) findViewById(R.id.edtTolken);
-		btnEnviaTolken = (Button) findViewById(R.id.btnEnviaTolken);
-		btnEnviaTolken.setOnClickListener(this);
-		btnGerarTolken = (Button) findViewById(R.id.btnGerarTolken);
-		btnGerarTolken.setOnClickListener(this);
-		Intent intencao = getIntent();
-		vl.receParamLogin(intencao);
+		ms = new Mensagem();
+		ws = new WebService(preferencia);
+		iniciaComponetes();
 	}
 	
 	@Override
@@ -44,19 +41,11 @@ public class Twitter extends Activity implements View.OnClickListener{
 		
 		switch (v.getId()){
 			 
-			case R.id.btnEnviaTolken:
-				
-				WebService ws = new  WebService("http://192.168.1.177:8080/$" + 
-												edtTolken.getText().toString() + 
-												"?TOLKEN");
-				String msg = ws.getRequisicao();
-				//criando uma Torrada
-				Toast.makeText(Twitter.this, 
-						msg,
-						Toast.LENGTH_LONG).show();
-	
+			case R.id.btnEnviaToken:
+				String msg = ws.token(edtToken.getText().toString());
+				ms.showToast(msg,this);	
 			break;
-			case R.id.btnGerarTolken:
+			case R.id.btnGerarToken:
 				final WebView pagina = new WebView(this);//(WebView)findViewById(R.id.pagina);
 				//setContentView(pagina);
 				//Habilita o JavaScript nas paginas web
@@ -71,4 +60,11 @@ public class Twitter extends Activity implements View.OnClickListener{
 		}	
 	}
 	
+	public void iniciaComponetes(){
+		edtToken = (EditText) findViewById(R.id.edtToken);
+		btnEnviaToken = (Button) findViewById(R.id.btnEnviaToken);
+		btnEnviaToken.setOnClickListener(this);
+		btnGerarToken = (Button) findViewById(R.id.btnGerarToken);
+		btnGerarToken.setOnClickListener(this);		
+	}
 }
