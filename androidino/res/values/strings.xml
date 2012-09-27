@@ -14,8 +14,8 @@
     
     
     <string name="confTwitter">Conf. Twitter</string>
-    <string name="enviaTolken">Enviar Tolken Twitter</string>
-	<string name="gerarTolken">Gerar Tolken Twitter</string>
+    <string name="enviaToken">Enviar Token Twitter</string>
+	<string name="gerarToken">Gerar Token Twitter</string>
 	
 	<string name="senhaAtual">Senha Atual:</string>
 	<string name="senhaNova">Nova Senha:</string>

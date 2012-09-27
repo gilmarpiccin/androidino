@@ -3,6 +3,7 @@ package com.androidino;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -15,16 +16,58 @@ import org.apache.http.params.HttpParams;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 public class WebService {
 	 private static final int TIMEOUT_CONEXAO = 20000; // 20 segundos
 	    private static final int TIMEOUT_SOCKET = 30000; // 30 segundos
 	    private static final int TAM_MAX_BUFFER = 10240; // 10Kbytes
+	    private SharedPreferences serverSettings;
 	    private String url;
+	    private String senha;
+	    private String usuario;
+	    private String IP;
+	    private String porta;
 	    
-	    public WebService(String url) {
-	        this.url = url;
+	    public WebService(SharedPreferences preferencias) {
+	        atualizaPreferencia(preferencias);
+	    }
+	    
+	    public void atualizaPreferencia(SharedPreferences settings){
+	    		serverSettings = settings;
+	    		usuario = serverSettings.getString("usuario","Gilmar");
+	    		senha = serverSettings.getString("senha", "123");
+	    		porta = serverSettings.getString("porta", "8080");
+	    	    IP = serverSettings.getString("ip", "192.168.1.177");
+	    	    	
+	    }
+	    
+	    public Boolean login(){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?LOGIN";
+	    	String retorno = getRequisicao();
+	    	retorno = retorno.replaceAll("\n", "");
+	    	return Boolean.parseBoolean(retorno);
+	    }
+	    
+	    public String redefineSenha(String prSenha){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+prSenha+"?REDESENHA";
+	    	String retorno = getRequisicao();
+	    	retorno = retorno.replaceAll("\n", "");
+	    	return retorno;
+	    }
+	    
+	    public String token(String sTolken){
+	    	String retorno;
+	    
+	    	if (login()) {
+	    		retorno = "Login inválido";
+	    	}else{
+		    	this.url = "http://"+IP+":"+porta+"/$"+sTolken+"?TOKEN";
+		    	retorno = getRequisicao();
+		    	retorno = retorno.replaceAll("\n", "");
+	    	}	    	
+	    	return retorno;
 	    }
 	    
 	    public String getRequisicao(){
