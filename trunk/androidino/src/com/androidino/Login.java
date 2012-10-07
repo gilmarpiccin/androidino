@@ -23,18 +23,17 @@ public class Login extends Activity implements View.OnClickListener{
         ms = new Mensagem();
 		preferencia = PreferenceManager.getDefaultSharedPreferences(this);
 		ws = new WebService(preferencia);
-
-        //inicializando componentes
         inicializandoComponentes();
   }
 
 	public void onClick(View v) {
-		// com este método é possivel organivar todos s OnClick
+		
 		switch (v.getId()){
  
 			case R.id.btnLogin:
 				ms.msgEspera("Carregando...","Aguarde",this);
-				 
+				
+				//validação do login (retorno é boolano).
 				if(ws.login()){
 					Intent AbrirMenu = new Intent("android.intent.action.MENUINICIAL");
 					
@@ -45,8 +44,8 @@ public class Login extends Activity implements View.OnClickListener{
 					editor.commit();
 					startActivity(AbrirMenu);
 				}else{
-					ms.showToast("Login ou Senha incorreta!",this);
-					ms.msCancEspera();
+					ms.showToast("Login ou Senha incorreta!",this);//menssagem rápida na tela.
+					ms.msCancEspera();// fecha a msgEspera;
 				break;
 			}
 		}
@@ -54,7 +53,7 @@ public class Login extends Activity implements View.OnClickListener{
 
 	public void inicializandoComponentes()
 	{
-		 //fazendo a referencia aos compoentes da tela
+		 //fazendo a referencia dos compoentes da tela (XML) para a classe 
 	      btnLogin 	 = (Button)findViewById(R.id.btnLogin);
 	      btnLogin.setOnClickListener(this);
 	      
@@ -64,7 +63,6 @@ public class Login extends Activity implements View.OnClickListener{
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		finish();
 	}	

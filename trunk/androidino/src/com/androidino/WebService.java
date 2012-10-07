@@ -36,38 +36,41 @@ public class WebService {
 	    
 	    public void atualizaPreferencia(SharedPreferences settings){
 	    		serverSettings = settings;
-	    		usuario = serverSettings.getString("usuario","Gilmar");
-	    		senha = serverSettings.getString("senha", "123");
+	    		usuario = serverSettings.getString("usuario","admin");
+	    		senha = serverSettings.getString("senha", "admin");
 	    		porta = serverSettings.getString("porta", "8080");
-	    	    IP = serverSettings.getString("ip", "192.168.1.177");
+	    	    IP = serverSettings.getString("ip", "androidino.dydns.info");
 	    	    	
 	    }
 	    
 	    public Boolean login(){
 	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?LOGIN";
 	    	String retorno = getRequisicao();
-	    	retorno = retorno.replaceAll("\n", "");
 	    	return Boolean.parseBoolean(retorno);
 	    }
 	    
 	    public String redefineSenha(String prSenha){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+prSenha+"?REDESENHA";
-	    	String retorno = getRequisicao();
-	    	retorno = retorno.replaceAll("\n", "");
-	    	return retorno;
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+prSenha+"?REDESENHA";  	
+	    	return getRequisicao();
 	    }
 	    
 	    public String token(String sTolken){
-	    	String retorno;
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+sTolken+"#TOKEN";
+	    	return getRequisicao();
+	    }
 	    
-	    	if (login()) {
-	    		retorno = "Login inválido";
-	    	}else{
-		    	this.url = "http://"+IP+":"+porta+"/$"+sTolken+"?TOKEN";
-		    	retorno = getRequisicao();
-		    	retorno = retorno.replaceAll("\n", "");
-	    	}	    	
-	    	return retorno;
+	    public String sensorDigital(String prSensor){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prSensor;
+	    	return getRequisicao();
+	    }
+	    
+	    public String porta(String prPorta){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prPorta+"#PORTA";
+	    	return getRequisicao();
+	    }
+	    public String ip(String prIP){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prIP+"#IP";
+	    	return getRequisicao();
 	    }
 	    
 	    public String getRequisicao(){
@@ -109,11 +112,9 @@ public class WebService {
 	            Log.e("WebService", e.toString());
 	        }
 	        
+	        parserbuilder = parserbuilder.replaceAll("\n", "");
 	        return parserbuilder;    
 	    }
 	    
-		public void msgEspera(String msg, Activity tela){
-			ProgressDialog dialog = ProgressDialog.show(tela, "", msg, true);
-			}
 	
 }
