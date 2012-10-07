@@ -10,7 +10,6 @@ import android.widget.ListView;
 public class MenuInicial extends ListActivity {
 	//vetor do MENU
 	String classes[] = {"Sensor","Configuração"};
-	Mensagem vl = new Mensagem();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +19,6 @@ public class MenuInicial extends ListActivity {
 						android.R.layout.simple_expandable_list_item_1,
 						classes)//layout interno do android 
 		);
-
 	}
 	
 	
@@ -28,7 +26,8 @@ public class MenuInicial extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		String classeSelecionada = classes [position];
-		//tratamento de acentuação
+
+		//Tratamento para chamar a classe correta
 		if (classeSelecionada =="Configuração")
 			classeSelecionada = "MenuConfiguracao";
 		

@@ -13,16 +13,14 @@ public class Splash extends Activity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 	
-		MinhaMusica = MediaPlayer.create(Splash.this, R.raw.splash);
-		MinhaMusica.start();
-		
+		MinhaMusica = MediaPlayer.create(Splash.this, R.raw.splash);//onde está a musica
+		MinhaMusica.start();// executa a musica
+		//Thread criada para executar a musica e carregar a aplicação ao mesmo tempo
 		Thread timer = new Thread(){
-	
-			//evento que executa midias
+			//Implementa o que a thead irá fazer.
 			@Override
 			public void run() {
 				
@@ -34,25 +32,23 @@ public class Splash extends Activity{
 				}
 				finally
 				{
-					//O que será executado após a execução da midia 
+					//Abre a tela login através de uma intenção criada no arquivo manifesto 
 					Intent abreAtividadeInicial = new Intent("android.intent.action.LOGIN");
 					startActivity(abreAtividadeInicial);
 					
 				}
 			}
-			
-			
 		};
-		timer. start();
+		timer. start();// executa a thread
 	 
 	}
-	//Evento de Pausa
+
 	@Override
 	protected void onPause() {
-
 		super.onPause();
+		//fecha o tela 
 		finish();
+		//libera a musica da memória
 		MinhaMusica.release();
-		
 	}	
 }

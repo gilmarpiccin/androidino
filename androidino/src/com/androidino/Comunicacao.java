@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class Comunicacao extends Activity implements View.OnClickListener{
-	Button btnConfirmar;
-	EditText edtEndIP,edtPorta;
+	private Button btnConfirmar;
+	private EditText edtEndIP,edtPorta;
+	private WebService ws;
+	private SharedPreferences preferencia;
+	private Mensagem ms;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +23,12 @@ public class Comunicacao extends Activity implements View.OnClickListener{
 		btnConfirmar.setOnClickListener(this);
 		edtEndIP = (EditText) findViewById(R.id.edtEnderecoIP);
 		edtPorta = (EditText) findViewById(R.id.edtPorta);
-		SharedPreferences settings = getSharedPreferences("ConfigSevidor",0);
-		edtEndIP.setText(settings.getString("IP", "").toString());
-		edtPorta.setText(settings.getString("porta", "").toString());
+		preferencia = getSharedPreferences("ConfigSevidor",0);
+		edtEndIP.setText(preferencia.getString("IP", "androidino.dyndns.info").toString());
+		edtPorta.setText(preferencia.getString("porta", "8080").toString());
 		
-		
+		ws = new WebService(preferencia);
+		ms = new Mensagem();
 	}
 
 	public void onClick(View v) {
@@ -36,6 +39,12 @@ public class Comunicacao extends Activity implements View.OnClickListener{
 			editor.putString("ip",edtEndIP.getText().toString());
 			editor.putString("porta",edtPorta.getText().toString());
 			editor.commit();
+			
+			ms.showToast(ws.ip(preferencia.getString("IP", "androidino.dyndns.info").toString()),
+						this);
+			ms.showToast(ws.porta(preferencia.getString("porta", "8080").toString()),
+						this);
+			
 			finish();
 			break;
 

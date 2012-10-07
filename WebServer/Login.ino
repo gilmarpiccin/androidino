@@ -32,6 +32,8 @@ String redefineSenha(String sURL){
   String sUsuario = sURL.substring(sURL.indexOf('$')+1,sURL.indexOf('&'));
   String sNovaSenha = sURL.substring(sURL.indexOf('&')+1,sURL.indexOf("?"));
 //  grava a nova senha concatennado o usuario;senha
-  return gravaArquivoSD("login.txt",sUsuario + ";" + sNovaSenha);
+  String sArquivo = sUsuario;
+  sArquivo.concat(".txt");
+  return gravaArquivoSD(sArquivo,sUsuario + ";" + sNovaSenha);
 
 }

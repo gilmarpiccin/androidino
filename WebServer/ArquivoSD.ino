@@ -12,9 +12,13 @@ void iniciaSD(){
     Serial.println("SD Inincializado com exito.");
 }
 
-String gravaArquivoSD(char cArquivo[],String sTexto){
+String gravaArquivoSD(String sArquivo,String sTexto){
   File flFile;
   iniciaSD();
+  char cArquivo [sArquivo.length()];
+  for (int i=0 ; i< sArquivo.length();i++)
+    cArquivo[i] =  sArquivo.charAt(i);
+    
   SD.remove(cArquivo);//Apaga o arquivo para gravar em cima sempre 1 registro
   flFile = SD.open(cArquivo, FILE_WRITE);//Se não existe cria o arqruivo
   
@@ -32,8 +36,12 @@ String gravaArquivoSD(char cArquivo[],String sTexto){
   }
 }
 
-String lerArquivoSD (char cArquivo[]){
+String lerArquivoSD (String sArquivo){
   iniciaSD();
+  char cArquivo [sArquivo.length()];
+  for (int i=0 ; i< sArquivo.length();i++)
+    cArquivo[i] =  sArquivo.charAt(i);
+    
   if (!SD.exists(cArquivo)){
     Serial.println("não existe arquivo");
     return"";

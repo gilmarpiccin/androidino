@@ -50,7 +50,7 @@ void loop() {
   if (client) {
     Serial.println("Novo cliente");
     boolean bLinhaBranco = true; //Solicitação http termina com uma linha em branco
-    String sURL;
+    String sURL,sLogin,sUsuario;
     byte byOpcao;
     
     while (client.connected()) {
@@ -63,18 +63,22 @@ void loop() {
           byOpcao = 1;
         else if (sURL.endsWith("?TWITTER"))
           byOpcao = 2;
-        else if (sURL.endsWith("?TOKEN")) 
+        else if (sURL.endsWith("#TOKEN")) 
           byOpcao = 3;
         else if (sURL.endsWith("?REDESENHA")) 
           byOpcao = 4;  
         else if (sURL.endsWith("?DHT")) 
           byOpcao = 5;  
-        else if (sURL.endsWith("?PRESENCA")) 
+        else if (sURL.endsWith("?MOVIMENTO")) 
           byOpcao = 6;  
         else if (sURL.endsWith("?FOGO")) 
           byOpcao = 7;
         else if (sURL.endsWith("?ONOFF")) 
           byOpcao = 8;    
+        else if (sURL.endsWith("#IP")) 
+          byOpcao = 9;    
+        else if (sURL.endsWith("#PORTA")) 
+          byOpcao = 10;    
           
         //Se Chegou for quebra de linha E a linha esta em branco
         if (cAux == '\n' && bLinhaBranco) {
@@ -83,44 +87,50 @@ void loop() {
           client.println("Content-Type: text/html");
           client.println("Connnection: close");
           client.println();
-          
-           switch (byOpcao) {
-            case 1://Login
-              client.print(validaLogin(sURL,lerArquivoSD("login.txt")));
-              break;
-              
-            case 2://posta no twitter
-              enviaTwitter("Teste com arduino");//Enviado Mensagem para Twitter
-              break;
-              
-            case 3://grava o tolken do twitter no SD
-              client.print(gravaToken(sURL));
-              break;
-              
-            case 4://Redefinir Senha
-              client.print(redefineSenha(sURL));
-              break;
-              
-            case 5://Sensor Tempeatura
-              
-              client.print("Sensor de Temperatura "+ sensorOnOFF(DHT));
-              break;
-              
-            case 6://Sensor Presenca
-              client.print("Sensor de Presença "+ sensorOnOFF(PRES));
-              break;
-              
-            case 7://Sensor Fogo
-              client.print("Sensor de FOGO "+ sensorOnOFF(FOGO));
-              break;
-              
-             case 8://Sensor LigaAlarme
-              client.print("");
-              break;
-            default: 
-              client.print("<h1>Seja Bem Vindo ao Web Server AndroiDino!</h1>");
-           }
-          break;
+          sUsuario = sURL.substring(sURL.indexOf('&')+1,sURL.indexOf("?"));//usuario da requisição
+          sUsuario.concat(".txt");//Concatena o nome do usuario com .txt que é o nome so arquivo
+          sLogin = validaLogin(sURL,lerArquivoSD(sUsuario));
+          if(sLogin="True"){//VALIDAÇÃ DE USUÁRIO
+            switch (byOpcao) {
+              case 1://Login
+                client.print(sLogin);
+                break;
+                
+              case 2://posta no twitter
+                enviaTwitter("Teste com arduino");//Enviado Mensagem para Twitter
+                break;
+                
+              case 3://grava o tolken do twitter no SD
+                 client.print(gravaToken(sURL));
+                 break;
+                
+              case 4://Redefinir Senha
+                client.print(redefineSenha(sURL));
+                break;
+                
+              case 5://Sensor Tempeatura
+                
+                client.print("Sensor de Temperatura "+ sensorOnOFF(DHT));
+                break;
+                
+              case 6://Sensor Presenca
+                client.print("Sensor de Presença "+ sensorOnOFF(PRES));
+                break;
+                
+              case 7://Sensor Fogo
+                client.print("Sensor de FOGO "+ sensorOnOFF(FOGO));
+                break;
+                
+               case 8://Sensor LigaAlarme
+                client.print("");
+                break;
+              default: 
+                client.print("<h1>Seja Bem Vindo ao Web Server AndroiDino!</h1>");
+             }
+            break;
+          }
+        }else{
+          client.print(sLogin);//Login inválido
         }
         if (cAux == '\n')
           bLinhaBranco = true;
