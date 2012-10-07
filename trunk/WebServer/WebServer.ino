@@ -10,19 +10,23 @@ boolean OnOFF = false;
 
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };// MAC do Arduino
 IPAddress ip(192,168,1,177);// IP FIXO
-EthernetServer server(8080);
+EthernetServer server(8080);// porta default
 
 void setup() {
   Serial.begin(9600);//Inicia a comunicação Serial
   while (!Serial) {
     ; //Fica no laço enquanto não estabelece a comunicação Serial
   }
-
-//  if (!Ethernet.begin(mac))//Usar o DHCP para procurar IP
-//  {
+  
+  if (!Ethernet.begin(mac))//Usar o DHCP para procurar IP
+  {
     Serial.println("Requisição de DHCP falhou.");
     Ethernet.begin(mac,ip);
-//  }
+  }
+  //busca a porta no cartão SD
+  EthernetServer server2(retornaPorta());
+  server = server2;
+  delay(1000);
   server.begin();//Iniciando o servidor
   Serial.print("Servidor localizando em: ");
   Serial.println(Ethernet.localIP());
