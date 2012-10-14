@@ -15,7 +15,7 @@ void iniciaSD(){
 String gravaArquivoSD(String sArquivo,String sTexto){
   File flFile;
   iniciaSD();
-  char cArquivo [sArquivo.length()];
+  char cArquivo [50];
   for (int i=0 ; i< sArquivo.length();i++)
     cArquivo[i] =  sArquivo.charAt(i);
     
@@ -38,7 +38,7 @@ String gravaArquivoSD(String sArquivo,String sTexto){
 
 String lerArquivoSD (String sArquivo){
   iniciaSD();
-  char cArquivo [sArquivo.length()];
+  char cArquivo [50];
   for (int i=0 ; i< sArquivo.length();i++)
     cArquivo[i] =  sArquivo.charAt(i);
     
@@ -46,7 +46,7 @@ String lerArquivoSD (String sArquivo){
     Serial.println("não existe arquivo");
     return"";
   }
-  
+  Serial.println(sArquivo);  
   Serial.println("Lendo Arquivo do SD");
   File flFile = SD.open(cArquivo);
   String sTexto;
