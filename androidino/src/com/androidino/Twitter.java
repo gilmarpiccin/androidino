@@ -30,12 +30,6 @@ public class Twitter extends Activity implements View.OnClickListener{
 		iniciaComponetes();
 	}
 	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_twitter, menu);
-		return true;
-	}
 
 	public void onClick(View v) {
 		

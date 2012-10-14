@@ -3,7 +3,6 @@ package com.androidino;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -35,6 +34,10 @@ public class Splash extends Activity{
 					//Abre a tela login através de uma intenção criada no arquivo manifesto 
 					Intent abreAtividadeInicial = new Intent("android.intent.action.LOGIN");
 					startActivity(abreAtividadeInicial);
+					//fecha o tela 
+					finish();
+					//libera a musica da memória
+					MinhaMusica.release();
 					
 				}
 			}
@@ -42,13 +45,4 @@ public class Splash extends Activity{
 		timer. start();// executa a thread
 	 
 	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		//fecha o tela 
-		finish();
-		//libera a musica da memória
-		MinhaMusica.release();
-	}	
 }

@@ -13,7 +13,7 @@
     <string name="desligaTodo">Desligar Todos</string>
     
     
-    <string name="confTwitter">Conf. Twitter</string>
+    <string name="confIP">Conf. IP REMOTO</string>
     <string name="enviaToken">Enviar Token Twitter</string>
 	<string name="gerarToken">Gerar Token Twitter</string>
 	
