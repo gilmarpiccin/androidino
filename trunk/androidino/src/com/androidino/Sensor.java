@@ -3,10 +3,8 @@ package com.androidino;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class Sensor extends Activity implements View.OnClickListener{

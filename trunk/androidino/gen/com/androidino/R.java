@@ -37,7 +37,7 @@ public final class R {
         public static final int edtSenhaNova=0x7f09000d;
         public static final int edtToken=0x7f090016;
         public static final int edtUsuario=0x7f090006;
-        public static final int menu_twitter=0x7f090019;
+        public static final int menu_ip=0x7f090019;
         public static final int tgbFogo=0x7f090015;
         public static final int tgbGeral=0x7f090011;
         public static final int tgbMovimento=0x7f090014;
@@ -60,11 +60,10 @@ public final class R {
         public static final int twitter=0x7f030005;
     }
     public static final class menu {
-        public static final int menu_twitter=0x7f080000;
+        public static final int menu_ip=0x7f080000;
     }
     public static final class raw {
-        public static final int farraue=0x7f050000;
-        public static final int splash=0x7f050001;
+        public static final int splash=0x7f050000;
     }
     public static final class string {
         public static final int app_name=0x7f070000;
@@ -72,7 +71,7 @@ public final class R {
         public static final int comuConfirma=0x7f070013;
         public static final int comuEnderecoIP=0x7f070011;
         public static final int comuPorta=0x7f070012;
-        public static final int confTwitter=0x7f07000a;
+        public static final int confIP=0x7f07000a;
         public static final int confirmarSenha=0x7f07000f;
         public static final int desligaTodo=0x7f070009;
         public static final int enviaToken=0x7f07000b;

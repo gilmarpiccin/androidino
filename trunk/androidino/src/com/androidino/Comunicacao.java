@@ -40,11 +40,6 @@ public class Comunicacao extends Activity implements View.OnClickListener{
 			editor.putString("porta",edtPorta.getText().toString());
 			editor.commit();
 			
-			ms.showToast(ws.ip(preferencia.getString("IP", "androidino.dyndns.info").toString()),
-						this);
-			ms.showToast(ws.porta(preferencia.getString("porta", "8080").toString()),
-						this);
-			
 			finish();
 			break;
 
