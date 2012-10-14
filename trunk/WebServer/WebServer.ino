@@ -8,7 +8,8 @@ byte SIRE = 40;
 
 boolean OnOFF = false;
 
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };// MAC do Arduino
+byte mac[] = {
+  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };// MAC do Arduino
 IPAddress ip(192,168,1,177);// IP FIXO
 EthernetServer server(8080);// porta default
 
@@ -17,7 +18,7 @@ void setup() {
   while (!Serial) {
     ; //Fica no laço enquanto não estabelece a comunicação Serial
   }
-  
+
   if (!Ethernet.begin(mac))//Usar o DHCP para procurar IP
   {
     Serial.println("Requisição de DHCP falhou.");
@@ -31,7 +32,7 @@ void setup() {
   Serial.print("Servidor localizando em: ");
   Serial.println(Ethernet.localIP());
 
- //Sensor DHT
+  //Sensor DHT
   iniciaDHT(DHT);
   //Sensor Presença
   iniciaSensor(PRES);
@@ -45,20 +46,21 @@ void setup() {
 void loop() {
   //Varrendo As portas do ALARME 
   Alarme();
-  
+
   EthernetClient client = server.available();// Criando um Cliente
   if (client) {
     Serial.println("Novo cliente");
     boolean bLinhaBranco = true; //Solicitação http termina com uma linha em branco
-    String sURL,sLogin,sUsuario;
+    String sURL,sLogin;
     byte byOpcao;
+    char cERRO []= "Acesso negado!";
     
     while (client.connected()) {
       if (client.available()) {
         char cAux = client.read();
         Serial.write(cAux);
         sURL.concat(cAux);//Concatenando caracter a caracter na String
-        
+
         if (sURL.endsWith("?LOGIN"))
           byOpcao = 1;
         else if (sURL.endsWith("?TWITTER"))
@@ -79,58 +81,60 @@ void loop() {
           byOpcao = 9;    
         else if (sURL.endsWith("#PORTA")) 
           byOpcao = 10;    
-          
+
         //Se Chegou for quebra de linha E a linha esta em branco
         if (cAux == '\n' && bLinhaBranco) {
+
           //Monta o cabeçalho de retorno para o browser
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
           client.println("Connnection: close");
           client.println();
-          sUsuario = sURL.substring(sURL.indexOf('&')+1,sURL.indexOf("?"));//usuario da requisição
-          sUsuario.concat(".txt");//Concatena o nome do usuario com .txt que é o nome so arquivo
-          sLogin = validaLogin(sURL,lerArquivoSD(sUsuario));
-          if(sLogin="True"){//VALIDAÇÃ DE USUÁRIO
-            switch (byOpcao) {
-              case 1://Login
-                client.print(sLogin);
-                break;
-                
-              case 2://posta no twitter
-                enviaTwitter("Teste com arduino");//Enviado Mensagem para Twitter
-                break;
-                
-              case 3://grava o tolken do twitter no SD
-                 client.print(gravaToken(sURL));
-                 break;
-                
-              case 4://Redefinir Senha
-                client.print(redefineSenha(sURL));
-                break;
-                
-              case 5://Sensor Tempeatura
-                
-                client.print("Sensor de Temperatura "+ sensorOnOFF(DHT));
-                break;
-                
-              case 6://Sensor Presenca
-                client.print("Sensor de Presença "+ sensorOnOFF(PRES));
-                break;
-                
-              case 7://Sensor Fogo
-                client.print("Sensor de FOGO "+ sensorOnOFF(FOGO));
-                break;
-                
-               case 8://Sensor LigaAlarme
-                client.print("");
-                break;
-              default: 
-                client.print("<h1>Seja Bem Vindo ao Web Server AndroiDino!</h1>");
-             }
+
+          switch (byOpcao) {
+          case 1://Login
+            client.print(validaLogin(sURL));
             break;
+
+          case 2://posta no twitter
+
+            enviaTwitter("Teste com arduino");//Enviado Mensagem para Twitter
+            break;
+
+          case 3://grava o tolken do twitter no SD
+            if (validaLogin(sURL)== "True")
+              client.print(gravaToken(sURL));
+            else
+              client.println(cERRO);
+            break;
+
+          case 4://Redefinir Senha
+            if (validaLogin(sURL)== "True")
+              client.print(redefineSenha(sURL));
+            else
+              client.println(cERRO);
+            break;
+
+          case 5://Sensor Tempeatura
+
+            client.print("Sensor de Temperatura "+ sensorOnOFF(DHT));
+            break;
+
+          case 6://Sensor Presenca
+            client.print("Sensor de Presença "+ sensorOnOFF(PRES));
+            break;
+
+          case 7://Sensor Fogo
+            client.print("Sensor de FOGO "+ sensorOnOFF(FOGO));
+            break;
+
+          case 8://Sensor LigaAlarme
+            client.print("");
+            break;
+          default: 
+            client.print("<h1>Seja Bem Vindo ao Web Server AndroiDino!</h1>");
           }
-        }else{
-          client.print(sLogin);//Login inválido
+          break;
         }
         if (cAux == '\n')
           bLinhaBranco = true;
@@ -149,3 +153,5 @@ void Alarme(){
   digitalWrite(SIRE,digitalRead(PRES));   
   digitalWrite(SIRE,digitalRead(FOGO));
 }
+
+
