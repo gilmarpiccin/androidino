@@ -1,6 +1,6 @@
 /**
-  Serviço Ethernet
-  Recebe por o resultado da função maintain() que renova o DHCP
+  ServiÃ§o Ethernet
+  Recebe por o resultado da funÃ§Ã£o maintain() que renova o DHCP
 **/
  String trocaDHCP(byte byDHCP){
    String sRetorno;
@@ -9,10 +9,10 @@
      sRetorno = "Nada ocorreu.";
      break;
    case 1:
-     sRetorno = "Renovação falhou.";
+     sRetorno = "RenovaÃ§Ã£o falhou.";
      break;
    case 2:
-     sRetorno = "Renovação com Sucesso.";
+     sRetorno = "RenovaÃ§Ã£o com Sucesso.";
      break;
    case 3:
      sRetorno = "Falha ao Realigar.";
@@ -40,3 +40,4 @@ int retornaPorta(){
    
  return iPorta;
  }
+

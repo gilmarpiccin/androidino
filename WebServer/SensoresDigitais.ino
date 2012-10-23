@@ -13,3 +13,4 @@ String sensorOnOFF(byte Pin){
   else
     return "Desligado.";
 }
+
