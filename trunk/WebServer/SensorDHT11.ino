@@ -54,3 +54,4 @@ String sensorTemperatura()
   }
  return sSensor;
 }
+

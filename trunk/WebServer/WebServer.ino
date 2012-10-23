@@ -27,6 +27,7 @@ void setup() {
   //busca a porta no cartão SD
   EthernetServer server2(retornaPorta());
   server = server2;
+
   delay(1000);
   server.begin();//Iniciando o servidor
   Serial.print("Servidor localizando em: ");
@@ -51,10 +52,10 @@ void loop() {
   if (client) {
     Serial.println("Novo cliente");
     boolean bLinhaBranco = true; //Solicitação http termina com uma linha em branco
-    String sURL,sLogin;
-    byte byOpcao;
+    String sURL;
+    int byOpcao;
     char cERRO []= "Acesso negado!";
-    
+
     while (client.connected()) {
       if (client.available()) {
         char cAux = client.read();
@@ -65,7 +66,7 @@ void loop() {
           byOpcao = 1;
         else if (sURL.endsWith("?TWITTER"))
           byOpcao = 2;
-        else if (sURL.endsWith("#TOKEN")) 
+        else if (sURL.endsWith("TOKEN")) 
           byOpcao = 3;
         else if (sURL.endsWith("?REDESENHA")) 
           byOpcao = 4;  
@@ -77,9 +78,9 @@ void loop() {
           byOpcao = 7;
         else if (sURL.endsWith("?ONOFF")) 
           byOpcao = 8;    
-        else if (sURL.endsWith("#IP")) 
+        else if (sURL.endsWith("=CADUSER")) 
           byOpcao = 9;    
-        else if (sURL.endsWith("#PORTA")) 
+        else if (sURL.endsWith("=PORTA")) 
           byOpcao = 10;    
 
         //Se Chegou for quebra de linha E a linha esta em branco
@@ -129,8 +130,14 @@ void loop() {
             break;
 
           case 8://Sensor LigaAlarme
-            client.print("");
+            client.print(gravaArquivoSD("gilmar/123/456/gilmar.txt","gilmar;123"));
             break;
+          case 9://Cadastro usuario
+             if (validaLogin(sURL)== "True")
+               client.print(cadUsuario(sURL));
+             else
+               client.println(cERRO);
+             break;
           default: 
             client.print("<h1>Seja Bem Vindo ao Web Server AndroiDino!</h1>");
           }
@@ -153,5 +160,6 @@ void Alarme(){
   digitalWrite(SIRE,digitalRead(PRES));   
   digitalWrite(SIRE,digitalRead(FOGO));
 }
+
 
 
