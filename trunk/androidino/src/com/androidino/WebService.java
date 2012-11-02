@@ -20,8 +20,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 public class WebService {
-	 private static final int TIMEOUT_CONEXAO = 20000; // 20 segundos
-	    private static final int TIMEOUT_SOCKET = 30000; // 30 segundos
+	 private static final int TIMEOUT_CONEXAO = 10000; // 10 segundos
+	    private static final int TIMEOUT_SOCKET = 15000; // 15 segundos
 	    private static final int TAM_MAX_BUFFER = 10240; // 10Kbytes
 	    private SharedPreferences serverSettings;
 	    private String url;
