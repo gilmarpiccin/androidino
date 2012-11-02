@@ -5,12 +5,11 @@
     <string name="senha">Senha</string>
     
     <string name="sensorLegenda">Sensor de:</string>
-    <string name="sensorGeral">Geral</string>
     <string name="sensorMovimeto">Movimento</string>
     <string name="sensorFogo">Fogo</string>
     <string name="sensorTemp">Temperatura</string>
-    <string name="ligaTodo">Ligar Todos</string>
-    <string name="desligaTodo">Desligar Todos</string>
+    <string name="ligaTodo">Ligar Alarme</string>
+    <string name="desligaTodo">Desligar Alarme</string>
     
     
     <string name="confIP">Conf. IP REMOTO</string>

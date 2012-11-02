@@ -45,7 +45,6 @@ public class MenuConfiguracao extends ListActivity {
 			} catch (ClassNotFoundException  e) {
 				e.printStackTrace();
 			}
-			
 		}
 
 }

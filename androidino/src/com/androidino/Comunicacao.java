@@ -23,9 +23,10 @@ public class Comunicacao extends Activity implements View.OnClickListener{
 		btnConfirmar.setOnClickListener(this);
 		edtEndIP = (EditText) findViewById(R.id.edtEnderecoIP);
 		edtPorta = (EditText) findViewById(R.id.edtPorta);
-		preferencia = getSharedPreferences("ConfigSevidor",0);
-		edtEndIP.setText(preferencia.getString("IP", "androidino.dyndns.info").toString());
-		edtPorta.setText(preferencia.getString("porta", "8080").toString());
+		
+		preferencia = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
+		edtEndIP.setText(preferencia.getString("IP", ""));
+		edtPorta.setText(preferencia.getString("porta", "8080"));
 		
 		ws = new WebService(preferencia);
 		ms = new Mensagem();
@@ -34,12 +35,7 @@ public class Comunicacao extends Activity implements View.OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnConfimarComu:
-			SharedPreferences settings = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putString("ip",edtEndIP.getText().toString());
-			editor.putString("porta",edtPorta.getText().toString());
-			editor.commit();
-			
+			salvarIPPorta(edtEndIP.getText().toString(),edtPorta.getText().toString(),getSharedPreferences("ConfigSevidor",MODE_PRIVATE));
 			finish();
 			break;
 
@@ -49,5 +45,11 @@ public class Comunicacao extends Activity implements View.OnClickListener{
 		
 	}
 	
-	
+	void salvarIPPorta(String IP , String Porta, SharedPreferences pref){
+		SharedPreferences settings = pref;
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("ip",IP);
+		editor.putString("porta",Porta);
+		editor.commit();
+	}
 }

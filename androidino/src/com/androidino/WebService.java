@@ -36,22 +36,24 @@ public class WebService {
 	    
 	    public void atualizaPreferencia(SharedPreferences settings){
 	    		serverSettings = settings;
-	    		usuario = serverSettings.getString("usuario","admin");
-	    		senha = serverSettings.getString("senha", "admin");
-	    		porta = serverSettings.getString("porta", "8080");
-	    	    IP = serverSettings.getString("ip", "androidino.dydns.info");
+	    		usuario = serverSettings.getString("usuario","");
+	    		senha = serverSettings.getString("senha", "");
+	    		porta = serverSettings.getString("porta", "");
+	    	    IP = serverSettings.getString("ip", "");
 	    	    	
 	    }
 	    
-	    public Boolean login(){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?LOGIN";
-	    	String retorno = getRequisicao();
-	    	return Boolean.parseBoolean(retorno);
+	    public Boolean login(String prUsuario, String prSenha){
+	    	this.url = "http://"+IP+":"+porta+"/$"+prUsuario+"&"+prSenha+"?LOGIN";
+	    	return validaRquisicao();
 	    }
 	    
 	    public String redefineSenha(String prSenha){
 	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+prSenha+"?REDESENHA";  	
-	    	return getRequisicao();
+	    	if (validaRquisicao())
+	    		return "Nova Senha gravada com sucesso!";
+	    	else
+	    		return "Nova Senha não foi gravada!";
 	    }
 	    
 	    public String token(String sTolken){
@@ -59,18 +61,17 @@ public class WebService {
 	    	return getRequisicao();
 	    }
 	    
-	    public String sensorDigital(String prSensor){
+	    public boolean sensorDigital(String prSensor){
 	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prSensor;
-	    	return getRequisicao();
+	    	return validaRquisicao();
 	    }
 	    
-	    public String porta(String prPorta){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prPorta+"#PORTA";
-	    	return getRequisicao();
-	    }
-	    public String ip(String prIP){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prIP+"#IP";
-	    	return getRequisicao();
+	    public String Sensor(){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?SENSOR";
+	    	String retorno = getRequisicao();
+	    	retorno = retorno.replaceAll("1","true");
+	    	retorno = retorno.replaceAll("0","false");
+	    	return retorno;
 	    }
 	    
 	    public String getRequisicao(){
@@ -114,6 +115,13 @@ public class WebService {
 	        
 	        parserbuilder = parserbuilder.replaceAll("\n", "");
 	        return parserbuilder;    
+	    }
+	    
+	    boolean validaRquisicao(){
+	    	if (getRequisicao().equals("1")){
+	    		return true;
+	    	}else
+	    		return false ; 
 	    }
 	    
 	
