@@ -100,13 +100,19 @@ public class Sensor extends Activity implements View.OnClickListener{
 	}
 	
 	void validaSensores(){
-		String sensor = ws.Sensor();
-		String [] sensor1 = sensor.split (Pattern.quote (";"));  
+		try {
+			String sensor = ws.Sensor();
+			String [] sensor1 = sensor.split (Pattern.quote (";"));  
+			
+			tgbTemperatura.setChecked(Boolean.parseBoolean(sensor1[0]));
+			tgbMovimento.setChecked(Boolean.parseBoolean(sensor1[1]));
+			tgbfogo.setChecked(Boolean.parseBoolean(sensor1[2]));
+			tgbGeral.setChecked(Boolean.parseBoolean(sensor1[3]));	
+		} catch (Exception e) {
+			ms.showToast("Conexão falhou!\n O Alarme pode estar desligado!", this);
+			finish();
+		}
 		
-		tgbTemperatura.setChecked(Boolean.parseBoolean(sensor1[0]));
-		tgbMovimento.setChecked(Boolean.parseBoolean(sensor1[1]));
-		tgbfogo.setChecked(Boolean.parseBoolean(sensor1[2]));
-		tgbGeral.setChecked(Boolean.parseBoolean(sensor1[3]));
 
 	}
 	
