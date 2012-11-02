@@ -30,7 +30,7 @@ void enviaTwitter(char sMsg[]){
   }
 }
 
-String gravaToken (String sURL){
+boolean gravaToken (String sURL){
   //$dnakjn?GravaTolken
   String sToken = sURL.substring(sURL.indexOf('?')+1,sURL.indexOf("="));
   return gravaArquivoSD("twitter.txt",sToken);
