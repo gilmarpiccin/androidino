@@ -14,7 +14,7 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 	private Button btnValidaSenha;
 	private EditText edtSenhAtual,edtSenhaNova,edtconfSenha;
 	private TextView txtSenhaAtual,txtSenhaNova,txtconfSenha;
-	private Mensagem vl;
+	private Mensagem ms;
 	private WebService ws;
 	private SharedPreferences preferencia;
 	
@@ -24,7 +24,7 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.redefinirsenha);
 		preferencia = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
-		vl = new Mensagem();
+		ms = new Mensagem();
 		ws = new WebService(preferencia);
 		inicializaComponentes();
 		/*
@@ -36,7 +36,7 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 		
 		switch (v.getId()) {
 		case R.id.btnValidarSenha:
-			vl.showToast( validaSenha(edtSenhAtual.getText().toString()
+			ms.showToast( validaSenha(edtSenhAtual.getText().toString()
 						  ,edtSenhaNova.getText().toString()
 						  ,edtconfSenha.getText().toString())
 						,this);  
@@ -71,12 +71,15 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 		//verifica se o retorno do web service foi verdadeiro*/
 		if (ws.login(preferencia.getString("usuario",""),edtSenhAtual.getText().toString())) {
 			
-			if (SenhaNova == confSenha){
-				sRetorno = ws.redefineSenha(SenhaNova);
+			if (SenhaNova.equals(confSenha)){
+				if(ws.redefineSenha(SenhaNova)){
+					sRetorno = "Nova Senha gravada com sucesso!";
+					ms.gravaCofUsuario(preferencia.getString("usuario",""),SenhaNova,preferencia);
+				}else
+					sRetorno = "Nova Senha Não foi gravada";
+				
 			}else{
 				edtSenhaNova.requestFocus();
-				txtSenhaNova.setBackgroundColor(R.color.Vermelho);
-				txtconfSenha.setBackgroundColor(R.color.Vermelho);
 				sRetorno = " A Senha Nova está diferente \n da senha de confirmação.";
 			}
 			

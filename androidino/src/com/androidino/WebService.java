@@ -48,12 +48,17 @@ public class WebService {
 	    	return validaRquisicao();
 	    }
 	    
-	    public String redefineSenha(String prSenha){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+prSenha+"?REDESENHA";  	
-	    	if (validaRquisicao())
-	    		return "Nova Senha gravada com sucesso!";
-	    	else
-	    		return "Nova Senha não foi gravada!";
+	    public String cadastroUsuario (String prUsuario, String prSenha){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prUsuario+"!"+prSenha+"=CADUSER";
+	    		if (validaRquisicao()) 
+	    			return "Usuário Cadastrado com Sucesso!";
+	    		else
+	    			return "Usuário não foi Cadastrado!";	    	
+	    }
+	    
+	    public Boolean redefineSenha(String prSenha){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+usuario+"!"+prSenha+"=CADUSER";  	
+	    		return validaRquisicao();
 	    }
 	    
 	    public String token(String sTolken){
@@ -73,6 +78,7 @@ public class WebService {
 	    	retorno = retorno.replaceAll("0","false");
 	    	return retorno;
 	    }
+	    
 	    
 	    public String getRequisicao(){
 	        String parserbuilder = "";
