@@ -3,21 +3,21 @@ package com.androidino;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.Toast;
 
 public class Mensagem extends Activity {
-	private ProgressDialog dialog;
-	
+
+	ProgressDialog pd;
 	public void msgEspera(String msg,String titulo, Activity tela){
-		dialog = ProgressDialog.show(tela, titulo, msg, true);
-	}
-	public void msCancEspera(){
-		dialog.cancel();
-		
+		//ProgressDialog dialog = ProgressDialog.show(tela, titulo, msg, true,true);
+		pd = ProgressDialog.show(tela, titulo, msg, true,true);
 	}
 	
-	
+	void calncelEspera(){
+		pd.cancel();
+	}
 	public void showToast(String msg, Activity tela){
 		Toast.makeText(tela, 
 				msg,

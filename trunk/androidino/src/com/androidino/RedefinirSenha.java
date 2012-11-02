@@ -23,7 +23,7 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 	
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.redefinirsenha);
-		preferencia = PreferenceManager.getDefaultSharedPreferences(this);
+		preferencia = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
 		vl = new Mensagem();
 		ws = new WebService(preferencia);
 		inicializaComponentes();
@@ -55,33 +55,23 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 		SenhaNova = SenhaNova.trim();
 		confSenha = confSenha.trim();
 		//verifica se estão vazio
-		if (SenhaAtual.equals("")) 
+		if (SenhaAtual.equals("")){
+			edtSenhAtual.requestFocus();
 			return txtSenhaAtual.getText() + " não pode estar vazia!";
-		else if (SenhaAtual.equals(""))
+		}
+		else if (SenhaNova.equals("")){
+			edtSenhaNova.requestFocus();
 			return txtSenhaNova.getText() + " não pode estar vazia!";
-		else if (confSenha.equals(""))
+		}
+		else if (confSenha.equals("")){
+			edtconfSenha.requestFocus();
 			return txtconfSenha.getText() + " não pode estar vazia!";
+		}
 		
-		//Seta a Senha atual digitada para verificar se é igual a cadastrada atravez do service ?LOGIN 
-		/*WebService ws = new WebService("http://192.168.1.177:8080/$"+
-									   vl.getUsuario() +
-									   "&" + SenhaAtual +
-									   "?LOGIN");
-		//Envia para o Web service a requisição setada que ira retornar um Status neste caso 'true' ou 'false' 
-		String sValidacao = ws.getRequisicao();
-		//Retira a quebra de linha
-		sValidacao = sValidacao.replaceAll("\n","");
 		//verifica se o retorno do web service foi verdadeiro*/
-		if (ws.login()) {
+		if (ws.login(preferencia.getString("usuario",""),edtSenhAtual.getText().toString())) {
 			
 			if (SenhaNova == confSenha){
-				//seta a nova senha para o Service ?REDESENHA
-				/*WebService ws2 = new WebService("http://192.168.1.177:8080/$"+
-												 vl.getUsuario() +
-												 "&"+ SenhaNova +
-												 "?REDESENHA");
-				//Envia a nova senha setada e o web service que irá retornar se foi redefinda ou não
-				sRetorno = ws2.getRequisicao();*/
 				sRetorno = ws.redefineSenha(SenhaNova);
 			}else{
 				edtSenhaNova.requestFocus();
@@ -103,7 +93,9 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 		btnValidaSenha.setOnClickListener(this);
 		
 		edtSenhAtual =  (EditText) findViewById(R.id.edtSenhaAtual);
+		edtSenhAtual.setFocusable(true);
 		edtSenhaNova =  (EditText) findViewById(R.id.edtSenhaNova);
+		edtSenhaNova.setFocusable(true);
 		edtconfSenha =  (EditText) findViewById(R.id.edtConfirmarSenha);
 		
 		txtSenhaAtual = (TextView) findViewById(R.id.txtSenhaAtual);

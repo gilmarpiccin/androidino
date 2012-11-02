@@ -2,6 +2,7 @@ package com.androidino;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +19,7 @@ import android.widget.EditText;
 public class Login extends Activity implements View.OnClickListener{
 	private Button btnLogin;
 	private EditText edtUsuario,edtSenha;
-	private Mensagem ms;
+	private Mensagem ms ;
 	private SharedPreferences preferencia;
 	private WebService ws;
 		
@@ -26,8 +27,8 @@ public class Login extends Activity implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        ms = new Mensagem();
-		preferencia = PreferenceManager.getDefaultSharedPreferences(this);
+        preferencia = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
+		ms = new Mensagem();
 		ws = new WebService(preferencia);
         inicializandoComponentes();
   }
@@ -48,7 +49,7 @@ public class Login extends Activity implements View.OnClickListener{
 				ms.msgEspera("Carregando...","Aguarde",this);
 				
 				//validação do login (retorno é boolano).
-				if(ws.login()){
+				if(ws.login(edtUsuario.getText().toString(),edtSenha.getText().toString())){
 					Intent AbrirMenu = new Intent("android.intent.action.MENUINICIAL");
 					
 					SharedPreferences settings = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
@@ -60,7 +61,7 @@ public class Login extends Activity implements View.OnClickListener{
 					this.finish();
 				}else{
 					ms.showToast("Login ou Senha incorreta!",this);//menssagem rápida na tela.
-					ms.msCancEspera();// fecha a msgEspera;
+					ms.calncelEspera();
 				break;
 			}
 		}
@@ -72,13 +73,18 @@ public class Login extends Activity implements View.OnClickListener{
 		case R.id.menu_ip:
 			LayoutInflater li = LayoutInflater.from(this);
 			View ipRemoto = li.inflate(R.layout.comunicacao, null);
+			final Comunicacao  cm = new Comunicacao();
 
 			//Deixa invivisel o botão do layout Comunicação
 			final Button btnConfirmar = (Button)ipRemoto.findViewById(R.id.btnConfimarComu);
 			btnConfirmar.setVisibility(ipRemoto.INVISIBLE);
+			
 			final EditText edtIP = (EditText) ipRemoto.findViewById(R.id.edtEnderecoIP);
 			final EditText edtPorta = (EditText) ipRemoto.findViewById(R.id.edtPorta);
-	
+			
+			preferencia = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
+			edtIP.setText(preferencia.getString("IP", ""));
+			edtPorta.setText(preferencia.getString("porta", "8080").toString());	
 
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			alertDialogBuilder.setView(ipRemoto);
@@ -86,11 +92,7 @@ public class Login extends Activity implements View.OnClickListener{
 			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			    public void onClick(DialogInterface dialog,int id) {
 			    	//Ao clicar em OK salva o IP e a PORTA para comunicação com arduino
-			    	SharedPreferences settings = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
-					SharedPreferences.Editor editor = settings.edit();
-					editor.putString("ip",edtIP.getText().toString());
-					editor.putString("porta",edtPorta.getText().toString());
-					editor.commit();				
+			    	cm.salvarIPPorta(edtIP.getText().toString(),edtPorta.getText().toString(),getSharedPreferences("ConfigSevidor",MODE_PRIVATE));				
 			    }
 			  })
 			.setNegativeButton("Cancelar",
