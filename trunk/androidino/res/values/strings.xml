@@ -10,18 +10,32 @@
     <string name="sensorTemp">Temperatura</string>
     <string name="ligaTodo">Ligar Alarme</string>
     <string name="desligaTodo">Desligar Alarme</string>
+    <string name="app_Sensores">AndroiDino - Monitoramento</string>
     
     
     <string name="confIP">Conf. IP REMOTO</string>
     <string name="enviaToken">Enviar Token Twitter</string>
 	<string name="gerarToken">Gerar Token Twitter</string>
+	<string name="app_twitter">AndroiDino - Token TWITTER</string>
 	
 	<string name="senhaAtual">Senha Atual:</string>
 	<string name="senhaNova">Nova Senha:</string>
 	<string name="confirmarSenha">Confirmar Nova Senha:</string>
 	<string name="btnconfirmarSenha">Confirmar</string>
+	<string name="app_redesenha">AndroiDino - Redefinir Senha</string>
 	
 	<string name="comuEnderecoIP">IP ou Endereco de rede:</string>
 	<string name="comuPorta">Porta:</string>
 	<string name="comuConfirma">Confirmar</string>
+	<string name="app_Comunicacao">AndroiDino - Cadastro IP/PORTA</string>
+	
+	<string name="cadNome">Nome: </string>
+	<string name="cadSenha">Senha:</string>
+	<string name="cadConfsenha">Confirmar Senha:</string>
+	<string name="btnCadCadastro">Confirmar</string>
+	<string name="app_cadastro">AndroiDino - Cadastro Usuário</string>
+
+	<string name="app_mmInicial">AndroiDino - Menu Inicial</string>
+	<string name="app_mmConf">AndroiDino - Menu Configuração</string>
+		
 </resources>
