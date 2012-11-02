@@ -12,7 +12,7 @@ void iniciaSD(){
     Serial.println("SD Inincializado com exito.");
 }
 
-String gravaArquivoSD(String sArquivo,String sTexto){
+boolean gravaArquivoSD(String sArquivo,String sTexto){
   File flFile;
   iniciaSD();
   char cArquivo [50]="";
@@ -47,29 +47,27 @@ String gravaArquivoSD(String sArquivo,String sTexto){
     flFile.print(sTexto);
     flFile.close();
     Serial.println("Gravado com Sucesso.");
-    return "Garavado com Sucesso.";
+    return true;
   } 
   else {
     Serial.println("Erro ao Abrir: "  );
     Serial.print(cArquivo);
-    return "Erro ao Abrir.";
+    return false;
   }
 }
 
 String lerArquivoSD (String sArquivo){
   iniciaSD();
-  char cArquivo [50];
+  char cArquivo [50]="";
   
   for (int i=0 ; i< sArquivo.length();i++)
     cArquivo[i] =  sArquivo.charAt(i);
-    
-  Serial.println(cArquivo);
+  Serial.println(sArquivo);      
   if (!SD.exists(cArquivo)){
     Serial.println("não existe arquivo");
     return"";
   }
-  
-  Serial.println(sArquivo);  
+
   Serial.println("\n Lendo Arquivo do SD");
   File flFile = SD.open(cArquivo);
   String sTexto;

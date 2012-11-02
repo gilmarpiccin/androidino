@@ -5,12 +5,9 @@ void iniciaSensor(byte Pin){
   digitalWrite(Pin,LOW);
 }
 
-String sensorOnOFF(byte Pin){
+boolean sensorOnOFF(byte Pin){
   boolean estado = !digitalRead(Pin);
   digitalWrite(Pin,estado);
-  if (estado)
-    return "Ligado.";
-  else
-    return "Desligado.";
+  return estado;
 }
 

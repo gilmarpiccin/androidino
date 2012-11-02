@@ -2,31 +2,7 @@
   ServiÃ§o Ethernet
   Recebe por o resultado da funÃ§Ã£o maintain() que renova o DHCP
 **/
- String trocaDHCP(byte byDHCP){
-   String sRetorno;
-   switch (byDHCP){
-   case 0:
-     sRetorno = "Nada ocorreu.";
-     break;
-   case 1:
-     sRetorno = "RenovaÃ§Ã£o falhou.";
-     break;
-   case 2:
-     sRetorno = "RenovaÃ§Ã£o com Sucesso.";
-     break;
-   case 3:
-     sRetorno = "Falha ao Realigar.";
-     break;
-   case 4:
-     sRetorno = "Sucesso ao Religar";
-     break;
-   default:
-      sRetorno = "";
-   } 
-   
-   return sRetorno;
- }
- 
+
 int retornaPorta(){
  int iPorta =8080;
  char cPorta[5] ;
