@@ -67,20 +67,18 @@ void loop() {
           byOpcao = 2;
         else if (sURL.endsWith("TOKEN")) 
           byOpcao = 3;
-        else if (sURL.endsWith("?REDESENHA")) 
-          byOpcao = 4;  
         else if (sURL.endsWith("?DHT")) 
-          byOpcao = 5;  
+          byOpcao = 4;  
         else if (sURL.endsWith("?MOVIMENTO")) 
-          byOpcao = 6;  
+          byOpcao = 5;  
         else if (sURL.endsWith("?FOGO")) 
-          byOpcao = 7;
+          byOpcao = 6;
         else if (sURL.endsWith("?ONOFF")) 
-          byOpcao = 8;    
+          byOpcao = 7;    
         else if (sURL.endsWith("=CADUSER")) 
-          byOpcao = 9;    
+          byOpcao = 8;    
         else if (sURL.endsWith("?SENSOR")) 
-          byOpcao = 10;    
+          byOpcao = 9;    
 
         //Se Chegou for quebra de linha E a linha esta em branco
         if (cAux == '\n' && bLinhaBranco) {
@@ -108,35 +106,28 @@ void loop() {
               client.print(false);
             break;
 
-          case 4://Redefinir Senha
-            if (validaLogin(sURL))
-              client.print(cadUsuario(sURL));
-            else
-              client.print(false);
-            break;
-
-          case 5://Sensor Tempeatura
+          case 4://Sensor Tempeatura
             if (validaLogin(sURL))
                client.print(sensorOnOFF(DHT));
              else
                client.print(false);
             break;
 
-          case 6://Sensor Presenca
+          case 5://Sensor Presenca
             if (validaLogin(sURL))
               client.print(sensorOnOFF(PRES));
             else
               client.print(false);
             break;
 
-          case 7://Sensor Fogo
+          case 6://Sensor Fogo
             if (validaLogin(sURL))
               client.print(sensorOnOFF(FOGO));
             else
               client.print(false);
             break;
 
-          case 8:// Liga/desliga Alarme
+          case 7:// Liga/desliga Alarme
              if (validaLogin(sURL)){
                OnOFF= !OnOFF ;      
                client.print(OnOFF);
@@ -144,13 +135,13 @@ void loop() {
              else
                client.print(false);
             break;
-          case 9://Cadastro usuario
+          case 8://Cadastro usuario
              if (validaLogin(sURL))
                client.print(cadUsuario(sURL));
              else
                client.print(false);
              break;
-          case 10://estatus dos Sensores
+          case 9://estatus dos Sensores
              if (validaLogin(sURL)){
                client.print(digitalRead(DHT)); 
                client.print(";");
