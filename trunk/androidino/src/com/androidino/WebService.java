@@ -48,12 +48,9 @@ public class WebService {
 	    	return validaRquisicao();
 	    }
 	    
-	    public String cadastroUsuario (String prUsuario, String prSenha){
+	    public boolean cadastroUsuario (String prUsuario, String prSenha){
 	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prUsuario+"!"+prSenha+"=CADUSER";
-	    		if (validaRquisicao()) 
-	    			return "Usuário Cadastrado com Sucesso!";
-	    		else
-	    			return "Usuário não foi Cadastrado!";	    	
+	    		return validaRquisicao();  	
 	    }
 	    
 	    public Boolean redefineSenha(String prSenha){

@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 public class MenuInicial extends ListActivity {
 	//vetor do MENU
-	String classes[] = {"Sensor","Configuração","Cad. Usuário"};
+	String classes[] = {"Sensor","Cad. Usuário","Configurações"};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class MenuInicial extends ListActivity {
 		String classeSelecionada = classes [position];
 
 		//Tratamento para chamar a classe correta
-		if (classeSelecionada =="Configuração")
+		if (classeSelecionada =="Configurações")
 			classeSelecionada = "MenuConfiguracao";
 		else if (classeSelecionada == "Cad. Usuário")
 			classeSelecionada = "CadUsuario";

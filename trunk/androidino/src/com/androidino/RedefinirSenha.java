@@ -49,11 +49,12 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 	}
  
 	public String validaSenha (String SenhaAtual, String SenhaNova, String confSenha){
-		String sRetorno ="";
+
 		//retira os espaços
 		SenhaAtual = SenhaAtual.trim();
 		SenhaNova = SenhaNova.trim();
 		confSenha = confSenha.trim();
+		
 		//verifica se estão vazio
 		if (SenhaAtual.equals("")){
 			edtSenhAtual.requestFocus();
@@ -68,27 +69,30 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 			return txtconfSenha.getText() + " não pode estar vazia!";
 		}
 		
-		//verifica se o retorno do web service foi verdadeiro*/
-		if (ws.login(preferencia.getString("usuario",""),edtSenhAtual.getText().toString())) {
-			
-			if (SenhaNova.equals(confSenha)){
-				if(ws.redefineSenha(SenhaNova)){
-					sRetorno = "Nova Senha gravada com sucesso!";
-					ms.gravaCofUsuario(preferencia.getString("usuario",""),SenhaNova,preferencia);
-				}else
-					sRetorno = "Nova Senha Não foi gravada";
-				
-			}else{
-				edtSenhaNova.requestFocus();
-				sRetorno = " A Senha Nova está diferente \n da senha de confirmação.";
-			}
-			
-		}else{
-			edtSenhAtual.requestFocus();
-			sRetorno = txtSenhaAtual.getText() + " está errada.";
+		else if (SenhaAtual.equals(SenhaNova)) {
+			return txtSenhaNova.getText() + " não pode ser igual a "+txtSenhaAtual.getText()+"!";
 		}
 		
-		return sRetorno;
+		//valida se a senha digitada é a mesma da confirmação
+		else if (!SenhaNova.equals(confSenha)){
+			edtSenhaNova.requestFocus();
+			return " A Senha Nova está diferente \n da senha de confirmação.";
+		}
+			
+		//Valida se a senha atual esta errada
+		else if (!ws.login(preferencia.getString("usuario",""),edtSenhAtual.getText().toString())) {
+			edtSenhAtual.requestFocus();
+			return txtSenhaAtual.getText() + " está errada.";
+		}
+		
+		//redefine a senha
+		else if(ws.redefineSenha(SenhaNova)){
+			//grava no arquivo de controle o usuario logado e a nova senha
+			ms.gravaCofUsuario(preferencia.getString("usuario",""),SenhaNova,preferencia);
+			finish();
+			return  "Nova Senha gravada com sucesso!";
+		}else
+			return "Nova Senha Não foi gravada.";
 	}
 	
 	public void inicializaComponentes(){
