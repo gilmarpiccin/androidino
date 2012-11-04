@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/img"
+    >
+    
+ 	<TextView 
+ 	    android:id="@+id/txtCadUsuario"
+ 	    android:text="@string/cadNome"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    />
+ 	    
+ 	<EditText
+        android:id="@+id/edtCadUsuario"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+    
+    <TextView 
+ 	    android:id="@+id/txtCadSenha"
+ 	    android:text="@string/cadSenha"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        
+    />
+ 	    
+ 	<EditText
+        android:id="@+id/edtCadSenha"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+
+    </EditText>
+ 	
+ 	
+ 	<TextView 
+ 	    android:id="@+id/txtCadConSenha"
+ 	    android:text="@string/cadConfsenha"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        
+    />
+ 	    
+ 	<EditText
+        android:id="@+id/edtCadConSenha"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+
+    </EditText>
+    
+ 	<Button
+ 	    android:id="@+id/btnCadConfirmar" 
+ 	    android:text="@string/btnCadCadastro"
+ 	    android:layout_width="fill_parent"
+ 	    android:layout_height="wrap_content"
+ 	/>
+ 	
+</LinearLayout>
+ 	    

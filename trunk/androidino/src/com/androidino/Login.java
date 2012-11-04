@@ -2,12 +2,10 @@ package com.androidino;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,24 +21,15 @@ public class Login extends Activity implements View.OnClickListener{
 	private SharedPreferences preferencia;
 	private WebService ws;
 		
-	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
-        preferencia = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
-		ms = new Mensagem();
-		ws = new WebService(preferencia);
-        inicializandoComponentes();
-  }
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_ip, menu);
-		return true;
+	//Cria a referencia do botão do layout com o atributo da classe
+	public void inicializandoComponentes()
+	{
+		btnLogin 	 = (Button)findViewById(R.id.btnLogin);
+	    btnLogin.setOnClickListener(this);
+	    edtUsuario = (EditText)findViewById(R.id.edtUsuario);
+	    edtSenha   = (EditText)findViewById(R.id.edtSenha);
 	}
-
-
+	
 	public void onClick(View v) {
 		
 		switch (v.getId()){
@@ -49,24 +38,49 @@ public class Login extends Activity implements View.OnClickListener{
 				ms.msgEspera("Carregando...","Aguarde",this);
 				
 				//validação do login (retorno é boolano).
-				if(ws.login(edtUsuario.getText().toString(),edtSenha.getText().toString())){
-					Intent AbrirMenu = new Intent("android.intent.action.MENUINICIAL");
-					
-					SharedPreferences settings = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
-					SharedPreferences.Editor editor = settings.edit();
-					editor.putString("usuario",edtUsuario.getText().toString());
-					editor.putString("senha",edtSenha.getText().toString());
-					editor.commit();
-					startActivity(AbrirMenu);
-					this.finish();
-				}else{
-					ms.showToast("Login ou Senha incorreta!",this);//menssagem rápida na tela.
+				try {
+					if(ws.login(edtUsuario.getText().toString(),edtSenha.getText().toString())){
+						Intent AbrirMenu = new Intent("android.intent.action.MENUINICIAL");
+						
+						SharedPreferences.Editor editor = preferencia.edit();
+						editor.putString("usuario",edtUsuario.getText().toString());
+						editor.putString("senha",edtSenha.getText().toString());
+						editor.commit();
+						startActivity(AbrirMenu);
+						this.finish();
+					}else{
+						ms.showToast("Login ou Senha incorreta!",this);//menssagem rápida na tela.
+						ms.calncelEspera();
+					}
+				} catch (Exception e) {
+					ms.showToast("Não Foi Possivel conectar ao Alarme \n Verifique seu IP e Porta.", this);
 					ms.calncelEspera();
+				}
+				
 				break;
 			}
-		}
 	}
+
+
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
+        preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
+		ms = new Mensagem();
+		ws = new WebService(preferencia);
+        inicializandoComponentes();
+  }
 	
+	//Cria o menu escondido acianado pelo botão menu do cel.
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_ip, menu);
+		return true;
+	}
+
+	//Clique do Menu que fica escondido
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -82,7 +96,7 @@ public class Login extends Activity implements View.OnClickListener{
 			final EditText edtIP = (EditText) ipRemoto.findViewById(R.id.edtEnderecoIP);
 			final EditText edtPorta = (EditText) ipRemoto.findViewById(R.id.edtPorta);
 			
-			preferencia = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
+			preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
 			edtIP.setText(preferencia.getString("IP", ""));
 			edtPorta.setText(preferencia.getString("porta", "8080").toString());	
 
@@ -92,7 +106,7 @@ public class Login extends Activity implements View.OnClickListener{
 			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			    public void onClick(DialogInterface dialog,int id) {
 			    	//Ao clicar em OK salva o IP e a PORTA para comunicação com arduino
-			    	cm.salvarIPPorta(edtIP.getText().toString(),edtPorta.getText().toString(),getSharedPreferences("ConfigSevidor",MODE_PRIVATE));				
+			    	cm.salvarIPPorta(edtIP.getText().toString(),edtPorta.getText().toString(),preferencia);				
 			    }
 			  })
 			.setNegativeButton("Cancelar",
@@ -105,7 +119,7 @@ public class Login extends Activity implements View.OnClickListener{
 			// Cria alertDialog
 			AlertDialog alertDialog = alertDialogBuilder.create();
 	
-			// Exibe
+			// Exibe a caixa de Dialogo
 			alertDialog.show();
 			break;
 
@@ -113,18 +127,5 @@ public class Login extends Activity implements View.OnClickListener{
 			break;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	public void inicializandoComponentes()
-	{
-		 //fazendo a referencia dos compoentes da tela (XML) para a classe 
-	      btnLogin 	 = (Button)findViewById(R.id.btnLogin);
-	      btnLogin.setOnClickListener(this);
-	      
-	      edtUsuario = (EditText)findViewById(R.id.edtUsuario);
-	      edtSenha   = (EditText)findViewById(R.id.edtSenha);
-	      
-	      
 	}	
-	
 }

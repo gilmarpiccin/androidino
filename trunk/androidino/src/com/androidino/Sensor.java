@@ -5,29 +5,33 @@ import java.util.regex.Pattern;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class Sensor extends Activity implements View.OnClickListener{
 
-	private ToggleButton tgbGeral, tgbMovimento, tgbfogo, tgbTemperatura ;
-	private TextView txtLegenda,txtGeral,txtMovimento,txtFogo,txtTemperatura;
-	private SharedPreferences preferencia;
-	private WebService ws;
+	private Button btnTemperatura;
 	private Mensagem ms;
+	private SharedPreferences preferencia;
+	private ToggleButton tgbGeral, tgbMovimento, tgbfogo;
+	private TextView txtLegenda;
+	private WebService ws;
 		
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sensor);
-		inicializaComponentes();
-		preferencia = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
-		ws = new WebService(preferencia);
-		ms = new Mensagem();
-		validaSensores();
+	void inicializaComponentes(){
+		tgbGeral = (ToggleButton) findViewById(R.id.tgbGeral);
+		tgbGeral.setOnClickListener(this);
+		tgbMovimento = (ToggleButton) findViewById(R.id.tgbMovimento);
+		tgbMovimento.setOnClickListener(this);
+		tgbfogo = (ToggleButton) findViewById(R.id.tgbFogo);
+		tgbfogo.setOnClickListener(this);
+		
+		btnTemperatura = (Button) findViewById(R.id.btnTemperatura);
+		btnTemperatura.setOnClickListener(this);
+		
+		//label
+		txtLegenda = (TextView) findViewById(R.id.txtSensorLegenda);
 	}
 
 	public void onClick(View v) {
@@ -45,14 +49,11 @@ public class Sensor extends Activity implements View.OnClickListener{
 			ms.showToast("Alarme " + sLigaDesliga  ,this) ;
 			break;
 		
-		case R.id.tgbTemperatura:
-			tgbTemperatura.setChecked(ws.sensorDigital("DHT"));
-			if (tgbTemperatura.isChecked())
-				sLigaDesliga =" Ligado!";
-			else
-				sLigaDesliga=" Desligado!";
-			
-			ms.showToast(txtLegenda.getText() + " " + txtTemperatura.getText() + "\n" + sLigaDesliga  ,this) ;
+		case R.id.btnTemperatura:
+			String sretorno = ws.DHT();
+			String [] DHT = sretorno.split(Pattern.quote(";"));
+			btnTemperatura.setText("Umidade: " + DHT[0] + "% \n" + "Temperatura: " + DHT[1] + " ºC");
+			ms.showToast("Umidade: " + DHT[0] + "% \n" + "Temperatura: " + DHT[1] + " ºC",this) ;
 			break;
 			
 		case R.id.tgbMovimento:
@@ -79,35 +80,32 @@ public class Sensor extends Activity implements View.OnClickListener{
 		
 	}
 	
-	void inicializaComponentes(){
-		tgbGeral = (ToggleButton) findViewById(R.id.tgbGeral);
-		tgbGeral.setOnClickListener(this);
-		tgbMovimento = (ToggleButton) findViewById(R.id.tgbMovimento);
-		tgbMovimento.setOnClickListener(this);
-		tgbfogo = (ToggleButton) findViewById(R.id.tgbFogo);
-		tgbfogo.setOnClickListener(this);
-		tgbTemperatura = (ToggleButton) findViewById(R.id.tgbTemperatura);
-		tgbTemperatura.setOnClickListener(this);
-		
-		//label
-		txtLegenda = (TextView) findViewById(R.id.txtSensorLegenda);
-		txtGeral = (TextView) findViewById(R.id.tgbGeral);
-		txtMovimento = (ToggleButton) findViewById(R.id.tgbMovimento);
-		txtFogo = (TextView) findViewById(R.id.tgbFogo);
-		txtTemperatura = (TextView) findViewById(R.id.tgbTemperatura);
-		
-		
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.sensor);
+		inicializaComponentes();
+		preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
+		ws = new WebService(preferencia);
+		ms = new Mensagem();
+		validaSensores();
 	}
 	
+	//valida o retorno do Alarme separando os Sensores
 	void validaSensores(){
 		try {
+			// Recebe a string com os status dos sensores concatenados por ";"
 			String sensor = ws.Sensor();
+			
+			//Separa os status em posições do array 
 			String [] sensor1 = sensor.split (Pattern.quote (";"));  
 			
-			tgbTemperatura.setChecked(Boolean.parseBoolean(sensor1[0]));
-			tgbMovimento.setChecked(Boolean.parseBoolean(sensor1[1]));
-			tgbfogo.setChecked(Boolean.parseBoolean(sensor1[2]));
-			tgbGeral.setChecked(Boolean.parseBoolean(sensor1[3]));	
+			//seta a propriedade "checada" conforme o status do sensor
+			//nesse momento os 0 e 1 já estão alterados para true ou false porem em  modo texto
+			//então deve ser feito a conversão para boolean
+			tgbMovimento.setChecked(Boolean.parseBoolean(sensor1[0]));
+			tgbfogo.setChecked(Boolean.parseBoolean(sensor1[1]));
+			tgbGeral.setChecked(Boolean.parseBoolean(sensor1[2]));	
 		} catch (Exception e) {
 			ms.showToast("Conexão falhou!\n O Alarme pode estar desligado!", this);
 			finish();

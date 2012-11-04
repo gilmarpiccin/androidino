@@ -3,6 +3,7 @@
 	<string name="app_name">Androidino</string>
     <string name="usuario">Usuário</string>
     <string name="senha">Senha</string>
+    <string name="logar">Logar</string>
     
     <string name="sensorLegenda">Sensor de:</string>
     <string name="sensorMovimeto">Movimento</string>
@@ -37,5 +38,6 @@
 
 	<string name="app_mmInicial">AndroiDino - Menu Inicial</string>
 	<string name="app_mmConf">AndroiDino - Menu Configuração</string>
-		
+
+    		
 </resources>

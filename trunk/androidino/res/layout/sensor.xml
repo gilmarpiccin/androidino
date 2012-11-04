@@ -18,12 +18,11 @@
             android:layout_height="wrap_content"
             android:text="@string/sensorLegenda" />               
         
-        <ToggleButton
-            android:id="@+id/tgbTemperatura"
+        <Button
+            android:id="@+id/btnTemperatura"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textOff="@string/sensorTemp"
-            android:textOn="@string/sensorTemp" />
+            android:text="@string/sensorTemp" />
 
         <ToggleButton
             android:id="@+id/tgbMovimento"

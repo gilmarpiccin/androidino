@@ -11,21 +11,19 @@ import android.widget.EditText;
 
 public class Twitter extends Activity implements View.OnClickListener{
 		
-		private EditText edtToken;
 		private Button btnEnviaToken,btnGerarToken;
+		private EditText edtToken;
 		private Mensagem ms;
-		private WebService ws;
 		private SharedPreferences preferencia;
+		private WebService ws;
 		
 
-		@Override
-		protected void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			setContentView(R.layout.twitter);
-			ms = new Mensagem();
-			preferencia = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
-			ws = new WebService(preferencia);
-			iniciaComponetes();
+		public void iniciaComponetes(){
+			edtToken = (EditText) findViewById(R.id.edtToken);
+			btnEnviaToken = (Button) findViewById(R.id.btnEnviaToken);
+			btnEnviaToken.setOnClickListener(this);
+			btnGerarToken = (Button) findViewById(R.id.btnGerarToken);
+			btnGerarToken.setOnClickListener(this);		
 		}
 		
 
@@ -52,12 +50,14 @@ public class Twitter extends Activity implements View.OnClickListener{
 			}	
 		}
 		
-		public void iniciaComponetes(){
-			edtToken = (EditText) findViewById(R.id.edtToken);
-			btnEnviaToken = (Button) findViewById(R.id.btnEnviaToken);
-			btnEnviaToken.setOnClickListener(this);
-			btnGerarToken = (Button) findViewById(R.id.btnGerarToken);
-			btnGerarToken.setOnClickListener(this);		
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.twitter);
+			ms = new Mensagem();
+			preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
+			ws = new WebService(preferencia);
+			iniciaComponetes();
 		}
 }
 
