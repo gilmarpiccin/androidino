@@ -3,7 +3,6 @@ package com.androidino;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,24 +12,26 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 
 	private Button btnValidaSenha;
 	private EditText edtSenhAtual,edtSenhaNova,edtconfSenha;
-	private TextView txtSenhaAtual,txtSenhaNova,txtconfSenha;
 	private Mensagem ms;
-	private WebService ws;
 	private SharedPreferences preferencia;
+	private TextView txtSenhaAtual,txtSenhaNova,txtconfSenha;
+	private WebService ws;
 	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-	
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.redefinirsenha);
-		preferencia = getSharedPreferences("ConfigSevidor",MODE_PRIVATE);
-		ms = new Mensagem();
-		ws = new WebService(preferencia);
-		inicializaComponentes();
-		/*
-		Intent intencao = getIntent();
-		vl.receParamLogin(intencao);*/		
-  	}
+	public void inicializaComponentes(){
+		btnValidaSenha = (Button) findViewById(R.id.btnValidarSenha);
+		btnValidaSenha.setOnClickListener(this);
+		
+		edtSenhAtual =  (EditText) findViewById(R.id.edtSenhaAtual);
+		edtSenhAtual.setFocusable(true);
+		edtSenhaNova =  (EditText) findViewById(R.id.edtSenhaNova);
+		edtSenhaNova.setFocusable(true);
+		edtconfSenha =  (EditText) findViewById(R.id.edtConfirmarSenha);
+		
+		txtSenhaAtual = (TextView) findViewById(R.id.txtSenhaAtual);
+		txtSenhaNova  = (TextView) findViewById(R.id.txtSenhaNova);
+		txtconfSenha  = (TextView) findViewById(R.id.txtConfirmarSenha);
+		
+	}
 
 	public void onClick(View v) {
 		
@@ -48,8 +49,20 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 		
 	}
  
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+	
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.redefinirsenha);
+		preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
+		ms = new Mensagem();
+		ws = new WebService(preferencia);
+		inicializaComponentes();
+	
+  	}
+	
 	public String validaSenha (String SenhaAtual, String SenhaNova, String confSenha){
-
+		String [] carcterInvalido = {"?","&","!","=","$"};
 		//retira os espaços
 		SenhaAtual = SenhaAtual.trim();
 		SenhaNova = SenhaNova.trim();
@@ -69,7 +82,22 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 			return txtconfSenha.getText() + " não pode estar vazia!";
 		}
 		
-		else if (SenhaAtual.equals(SenhaNova)) {
+		for (int i = 0; i < carcterInvalido.length; i++) {
+			if (SenhaAtual.matches(carcterInvalido[i])){
+				edtSenhAtual.requestFocus();
+				return " Não é permitodo o caractere: "+carcterInvalido[i];
+			}
+			else if (SenhaNova.matches(carcterInvalido[i])){
+				edtSenhaNova.requestFocus();
+				return " Não é permitodo o caracter: "+carcterInvalido[i];
+			}
+			else if (confSenha.matches(carcterInvalido[i])){
+				edtconfSenha.requestFocus();
+				return " Não é permitodo o caracteres: "+carcterInvalido[i];
+			}	
+		}
+		
+		if (SenhaAtual.equals(SenhaNova)) {
 			return txtSenhaNova.getText() + " não pode ser igual a "+txtSenhaAtual.getText()+"!";
 		}
 		
@@ -93,21 +121,5 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 			return  "Nova Senha gravada com sucesso!";
 		}else
 			return "Nova Senha Não foi gravada.";
-	}
-	
-	public void inicializaComponentes(){
-		btnValidaSenha = (Button) findViewById(R.id.btnValidarSenha);
-		btnValidaSenha.setOnClickListener(this);
-		
-		edtSenhAtual =  (EditText) findViewById(R.id.edtSenhaAtual);
-		edtSenhAtual.setFocusable(true);
-		edtSenhaNova =  (EditText) findViewById(R.id.edtSenhaNova);
-		edtSenhaNova.setFocusable(true);
-		edtconfSenha =  (EditText) findViewById(R.id.edtConfirmarSenha);
-		
-		txtSenhaAtual = (TextView) findViewById(R.id.txtSenhaAtual);
-		txtSenhaNova  = (TextView) findViewById(R.id.txtSenhaNova);
-		txtconfSenha  = (TextView) findViewById(R.id.txtConfirmarSenha);
-		
 	}
 }

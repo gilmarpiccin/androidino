@@ -12,6 +12,13 @@ public class MenuInicial extends ListActivity {
 	String classes[] = {"Sensor","Cad. Usuário","Configurações"};
 	
 	@Override
+	public void onBackPressed() {
+		
+		super.onBackPressed();
+	}
+	
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setListAdapter(
@@ -20,7 +27,6 @@ public class MenuInicial extends ListActivity {
 						classes)//layout interno do android 
 		);
 	}
-	
 	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -42,11 +48,5 @@ public class MenuInicial extends ListActivity {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	@Override
-	public void onBackPressed() {
-		
-		super.onBackPressed();
 	}
 }

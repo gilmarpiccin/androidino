@@ -39,9 +39,8 @@
 
     <Button
         android:id="@+id/btnLogin"
-        android:text="Logar"
+        android:text="@string/logar"
         android:nextFocusUp="@+id/edtUsuario"
-        android:imeOptions="actionNext"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
          
