@@ -29,17 +29,17 @@ public final class R {
         public static final int btnEnviaToken=0x7f09001e;
         public static final int btnGerarToken=0x7f09001f;
         public static final int btnLogin=0x7f090010;
+        public static final int btnRedConfirmar=0x7f090017;
         public static final int btnTemperatura=0x7f09001a;
-        public static final int btnValidarSenha=0x7f090017;
         public static final int edtCadConSenha=0x7f090005;
         public static final int edtCadSenha=0x7f090003;
         public static final int edtCadUsuario=0x7f090001;
-        public static final int edtConfirmarSenha=0x7f090016;
         public static final int edtEnderecoIP=0x7f090008;
         public static final int edtPorta=0x7f09000a;
+        public static final int edtRedConfirmar=0x7f090016;
+        public static final int edtRedSenhaAtual=0x7f090012;
+        public static final int edtRedSenhaNova=0x7f090014;
         public static final int edtSenha=0x7f09000e;
-        public static final int edtSenhaAtual=0x7f090012;
-        public static final int edtSenhaNova=0x7f090014;
         public static final int edtToken=0x7f09001d;
         public static final int edtUsuario=0x7f09000d;
         public static final int menu_ip=0x7f090020;
@@ -49,12 +49,12 @@ public final class R {
         public static final int txtCadConSenha=0x7f090004;
         public static final int txtCadSenha=0x7f090002;
         public static final int txtCadUsuario=0x7f090000;
-        public static final int txtConfirmarSenha=0x7f090015;
         public static final int txtEnderecoIP=0x7f090007;
         public static final int txtPorta=0x7f090009;
+        public static final int txtRedConfirmar=0x7f090015;
+        public static final int txtRedSenhaAtual=0x7f090011;
+        public static final int txtRedSenhaNova=0x7f090013;
         public static final int txtSenha=0x7f09000f;
-        public static final int txtSenhaAtual=0x7f090011;
-        public static final int txtSenhaNova=0x7f090013;
         public static final int txtSensorLegenda=0x7f090019;
         public static final int txtUsuario=0x7f09000c;
     }
@@ -74,6 +74,10 @@ public final class R {
         public static final int splash=0x7f050000;
     }
     public static final class string {
+        public static final int Redbtnconfirmar=0x7f070012;
+        public static final int Redconfirmar=0x7f070011;
+        public static final int RedsenhaAtual=0x7f07000f;
+        public static final int RedsenhaNova=0x7f070010;
         public static final int app_Comunicacao=0x7f070017;
         public static final int app_Sensores=0x7f07000a;
         public static final int app_cadastro=0x7f07001c;
@@ -83,7 +87,6 @@ public final class R {
         public static final int app_redesenha=0x7f070013;
         public static final int app_twitter=0x7f07000e;
         public static final int btnCadCadastro=0x7f07001b;
-        public static final int btnconfirmarSenha=0x7f070012;
         public static final int cadConfsenha=0x7f07001a;
         public static final int cadNome=0x7f070018;
         public static final int cadSenha=0x7f070019;
@@ -91,15 +94,12 @@ public final class R {
         public static final int comuEnderecoIP=0x7f070014;
         public static final int comuPorta=0x7f070015;
         public static final int confIP=0x7f07000b;
-        public static final int confirmarSenha=0x7f070011;
         public static final int desligaTodo=0x7f070009;
         public static final int enviaToken=0x7f07000c;
         public static final int gerarToken=0x7f07000d;
         public static final int ligaTodo=0x7f070008;
         public static final int logar=0x7f070003;
         public static final int senha=0x7f070002;
-        public static final int senhaAtual=0x7f07000f;
-        public static final int senhaNova=0x7f070010;
         public static final int sensorFogo=0x7f070006;
         public static final int sensorLegenda=0x7f070004;
         public static final int sensorMovimeto=0x7f070005;

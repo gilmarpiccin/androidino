@@ -19,10 +19,10 @@
 	<string name="gerarToken">Gerar Token Twitter</string>
 	<string name="app_twitter">AndroiDino - Token TWITTER</string>
 	
-	<string name="senhaAtual">Senha Atual:</string>
-	<string name="senhaNova">Nova Senha:</string>
-	<string name="confirmarSenha">Confirmar Nova Senha:</string>
-	<string name="btnconfirmarSenha">Confirmar</string>
+	<string name="RedsenhaAtual">Senha Atual:</string>
+	<string name="RedsenhaNova">Nova Senha:</string>
+	<string name="Redconfirmar">Confirmar Nova Senha:</string>
+	<string name="Redbtnconfirmar">Confirmar</string>
 	<string name="app_redesenha">AndroiDino - Redefinir Senha</string>
 	
 	<string name="comuEnderecoIP">IP ou Endereco de rede:</string>

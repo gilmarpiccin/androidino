@@ -7,14 +7,14 @@
     >
     
  	<TextView 
- 	    android:id="@+id/txtSenhaAtual"
- 	    android:text="@string/senhaAtual"
+ 	    android:id="@+id/txtRedSenhaAtual"
+ 	    android:text="@string/RedsenhaAtual"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
     />
  	    
  	<EditText
-        android:id="@+id/edtSenhaAtual"
+        android:id="@+id/edtRedSenhaAtual"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10" >
@@ -23,15 +23,15 @@
     </EditText>
     
     <TextView 
- 	    android:id="@+id/txtSenhaNova"
- 	    android:text="@string/senhaNova"
+ 	    android:id="@+id/txtRedSenhaNova"
+ 	    android:text="@string/RedsenhaNova"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         
     />
  	    
  	<EditText
-        android:id="@+id/edtSenhaNova"
+        android:id="@+id/edtRedSenhaNova"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10" >
@@ -40,15 +40,15 @@
  	
  	
  	<TextView 
- 	    android:id="@+id/txtConfirmarSenha"
- 	    android:text="@string/confirmarSenha"
+ 	    android:id="@+id/txtRedConfirmar"
+ 	    android:text="@string/Redconfirmar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         
     />
  	    
  	<EditText
-        android:id="@+id/edtConfirmarSenha"
+        android:id="@+id/edtRedConfirmar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10" >
@@ -56,8 +56,8 @@
     </EditText>
     
  	<Button
- 	    android:id="@+id/btnValidarSenha" 
- 	    android:text="@string/btnconfirmarSenha"
+ 	    android:id="@+id/btnRedConfirmar" 
+ 	    android:text="@string/Redbtnconfirmar"
  	    android:layout_width="fill_parent"
  	    android:layout_height="wrap_content"
  	/>
