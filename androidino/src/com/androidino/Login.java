@@ -31,7 +31,7 @@ public class Login extends Activity implements View.OnClickListener{
 	}
 	
 	public void onClick(View v) {
-		
+		ws = new WebService(preferencia);
 		switch (v.getId()){
  
 			case R.id.btnLogin:
@@ -68,7 +68,6 @@ public class Login extends Activity implements View.OnClickListener{
         setContentView(R.layout.login);
         preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
 		ms = new Mensagem();
-		ws = new WebService(preferencia);
         inicializandoComponentes();
   }
 	

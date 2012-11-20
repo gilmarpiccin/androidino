@@ -18,25 +18,26 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 	private WebService ws;
 	
 	public void inicializaComponentes(){
-		btnValidaSenha = (Button) findViewById(R.id.btnValidarSenha);
+		btnValidaSenha = (Button) findViewById(R.id.btnRedConfirmar);
 		btnValidaSenha.setOnClickListener(this);
 		
-		edtSenhAtual =  (EditText) findViewById(R.id.edtSenhaAtual);
+		edtSenhAtual =  (EditText) findViewById(R.id.edtRedSenhaAtual);
 		edtSenhAtual.setFocusable(true);
-		edtSenhaNova =  (EditText) findViewById(R.id.edtSenhaNova);
+		edtSenhaNova =  (EditText) findViewById(R.id.edtRedSenhaNova);
 		edtSenhaNova.setFocusable(true);
-		edtconfSenha =  (EditText) findViewById(R.id.edtConfirmarSenha);
+		edtconfSenha =  (EditText) findViewById(R.id.edtRedConfirmar);
+		edtconfSenha.setFocusable(true);
 		
-		txtSenhaAtual = (TextView) findViewById(R.id.txtSenhaAtual);
-		txtSenhaNova  = (TextView) findViewById(R.id.txtSenhaNova);
-		txtconfSenha  = (TextView) findViewById(R.id.txtConfirmarSenha);
+		txtSenhaAtual = (TextView) findViewById(R.id.txtRedSenhaAtual);
+		txtSenhaNova  = (TextView) findViewById(R.id.txtRedSenhaNova);
+		txtconfSenha  = (TextView) findViewById(R.id.txtRedConfirmar);
 		
 	}
 
 	public void onClick(View v) {
 		
 		switch (v.getId()) {
-		case R.id.btnValidarSenha:
+		case R.id.btnRedConfirmar:
 			ms.showToast( validaSenha(edtSenhAtual.getText().toString()
 						  ,edtSenhaNova.getText().toString()
 						  ,edtconfSenha.getText().toString())
@@ -83,15 +84,15 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 		}
 		
 		for (int i = 0; i < carcterInvalido.length; i++) {
-			if (SenhaAtual.matches(carcterInvalido[i])){
+			if (SenhaAtual.contains(carcterInvalido[i])){
 				edtSenhAtual.requestFocus();
 				return " Não é permitodo o caractere: "+carcterInvalido[i];
 			}
-			else if (SenhaNova.matches(carcterInvalido[i])){
+			else if (SenhaNova.contains(carcterInvalido[i])){
 				edtSenhaNova.requestFocus();
 				return " Não é permitodo o caracter: "+carcterInvalido[i];
 			}
-			else if (confSenha.matches(carcterInvalido[i])){
+			else if (confSenha.contains(carcterInvalido[i])){
 				edtconfSenha.requestFocus();
 				return " Não é permitodo o caracteres: "+carcterInvalido[i];
 			}	
