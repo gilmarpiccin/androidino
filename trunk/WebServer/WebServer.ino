@@ -6,7 +6,8 @@ byte PRES = 15;
 byte FOGO = 16;
 byte SIRE = 40;
 
-boolean OnOFF = true;
+boolean OnOFF = true; //Alarme Ligado
+boolean bDisparar = false;//Disparar Sirene 
 
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};// MAC do Arduino
 IPAddress ip(192,168,1,177);// IP FIXO
@@ -121,6 +122,8 @@ void loop() {
             case 7:// Liga/desliga Alarme
               OnOFF= !OnOFF ;      
               client.print(OnOFF);
+              if (!OnOFF)
+                bDisparar = false;
               break;
 
             case 8://Cadastro usuario
@@ -159,8 +162,16 @@ void loop() {
 }
 
 void Alarme(){
-  digitalWrite(SIRE,digitalRead(PRES));   
-  digitalWrite(SIRE,digitalRead(FOGO));
+//  digitalWrite(SIRE,digitalRead(PRES));   
+  //digitalWrite(SIRE,digitalRead(FOGO));
+  Serial.println(bDisparar);  
+  if (digitalRead(PRES) || digitalRead(FOGO)|| bDisparar)
+  {
+    Serial.println("Disparar");
+    bDisparar = true;//para continuar disparando
+    tone(SIRE,1999);
+    delay(500);
+  }
 }
 
 
