@@ -7,6 +7,8 @@ byte FOGO = 16;
 byte SIRE = 40;
 
 boolean OnOFF = true; //Alarme Ligado
+boolean bOnOffMov = true; //Sensor Movimento
+boolean bOnOffFogo = true; //Sensor Fogo
 boolean bDisparar = false;//Disparar Sirene 
 
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};// MAC do Arduino
@@ -111,12 +113,14 @@ void loop() {
               client.print(SensorTemperatura());
               break;
 
-            case 5://Sensor Presenca
-              client.print(sensorOnOFF(PRES));
+            case 5://Sensor Movimento
+              bOnOffMov = !bOnOffMov; //Se igual a False, seta como True e vice-versa
+              client.print(bOnOffMov);
               break;
 
             case 6://Sensor Fogo
-              client.print(sensorOnOFF(FOGO));
+              bOnOffFogo = !bOnOffFogo; //Seigual a False, seta como True e vice-versa
+              client.print(bOnOffFogo);
               break;
 
             case 7:// Liga/desliga Alarme
@@ -131,9 +135,9 @@ void loop() {
               break;
 
             case 9://estatus dos Sensores
-              client.print(digitalRead(PRES));
+              client.print(bOnOffMov);
               client.print(";");
-              client.print(digitalRead(FOGO));               
+              client.print(bOnOffFogo);               
               client.print(";");
               client.print(OnOFF);
               break;             
@@ -162,15 +166,24 @@ void loop() {
 }
 
 void Alarme(){
-//  digitalWrite(SIRE,digitalRead(PRES));   
-  //digitalWrite(SIRE,digitalRead(FOGO));
+//digitalWrite(SIRE,digitalRead(PRES));   
+//digitalWrite(SIRE,digitalRead(FOGO));
   Serial.println(bDisparar);  
-  if (digitalRead(PRES) || digitalRead(FOGO)|| bDisparar)
-  {
-    Serial.println("Disparar");
-    bDisparar = true;//para continuar disparando
-    tone(SIRE,1999);
-    delay(500);
+  int randNumero; //Numero randomico
+  char cNumero[] = "";
+  randNumero = random(500);
+  if (bOnOffMov){ //Se o sensor estiver ativo 
+    if (digitalRead(PRES)){ //Verifica se recebeu True p/ disparar a Sirene e o Twitter
+      digitalWrite(SIRE, HIGH); 
+      itoa(randNumero, cNumero, 3);
+      enviaTwitter(strcat(cNumero, "Sensor de Presença disparou!!! Corre Negada!"));
+    }
+}
+  if (bOnOffFogo){ 
+    if (digitalRead(FOGO)){ //Se o sensor estiver ativo 
+      digitalWrite(SIRE, HIGH); //Verifica se recebeu True p/ disparar a Sirene e o Twitter
+      enviaTwitter(strcat(cNumero, "Sensor de Fogo disparou!!! Chama o bombeiro!"));    
+    }
   }
 }
 
