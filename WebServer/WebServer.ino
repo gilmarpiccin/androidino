@@ -1,16 +1,15 @@
 #include <SPI.h>
 #include <Ethernet.h>
-#include <stdio.h>
-#include <string.h>
+
 byte DHT = 14;
 byte PRES = 15;
 byte FOGO = 16;
 byte SIRE = 40;
 
 boolean OnOFF = true; //Alarme Ligado
-boolean bOnOffMov = true; //Sensor Movimento
-boolean bOnOffFogo = true; //Sensor Fogo
-boolean bDisparar = false;//Disparar Sirene 
+boolean bOnOffMov = false; //Sensor Movimento
+boolean bOnOffFogo = false; //Sensor Fogo
+
 
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};// MAC do Arduino
 IPAddress ip(192,168,1,177);// IP FIXO
@@ -44,8 +43,14 @@ void setup() {
   iniciaSensor(PRES);
   //Sensor fogo
   iniciaSensor(FOGO);
-  //inicia sirene  
-  iniciaSensor(SIRE);
+  //inicia sirene
+  pinMode(SIRE,OUTPUT);
+  delay(10000);//tempo para estabilizar os sensores
+  digitalWrite(SIRE,HIGH);
+  delay(500);
+  digitalWrite(SIRE,LOW);
+
+  Serial.println("Alarme pronto para uso.");
 }
 
 void loop() {
@@ -112,23 +117,25 @@ void loop() {
               client.print(SensorHumidade());
               client.print(";");
               client.print(SensorTemperatura());
+              digitalWrite(SIRE,LOW);
               break;
 
             case 5://Sensor Movimento
               bOnOffMov = !bOnOffMov; //Se igual a False, seta como True e vice-versa
               client.print(bOnOffMov);
+              digitalWrite(SIRE,LOW);
               break;
 
             case 6://Sensor Fogo
               bOnOffFogo = !bOnOffFogo; //Seigual a False, seta como True e vice-versa
               client.print(bOnOffFogo);
+              digitalWrite(SIRE,LOW);
               break;
 
             case 7:// Liga/desliga Alarme
               OnOFF= !OnOFF ;      
               client.print(OnOFF);
-              if (!OnOFF)
-                bDisparar = false;
+              digitalWrite(SIRE,LOW);
               break;
 
             case 8://Cadastro usuario
@@ -167,19 +174,21 @@ void loop() {
 }
 
 void Alarme(){
-//digitalWrite(SIRE,digitalRead(PRES));   
-//digitalWrite(SIRE,digitalRead(FOGO));
   if (bOnOffMov){ //Se o sensor estiver ativo 
-    if (digitalRead(PRES)){ //Verifica se recebeu True p/ disparar a Sirene e o Twitter
+  Serial.println(digitalRead(PRES));
+    if ((digitalRead(PRES))&& (!digitalRead(SIRE))){ //se o Sensor de Movimento for aciona e a Sirene esiver desligada.
       digitalWrite(SIRE, HIGH); 
-      Serial.println(digitalRead(PRES));
-      enviaTwitter("Sensor de Presença disparou");
+      enviaTwitter("Sensor de Presença disparou!!");
     }
-}
+    pinMode(PRES,OUTPUT);
+    digitalWrite(PRES,LOW);
+    delay(100);
+    pinMode(PRES,INPUT);
+  }
   if (bOnOffFogo){ 
-    if (digitalRead(FOGO)){ //Se o sensor estiver ativo 
+    if ((digitalRead(FOGO)) && (!digitalRead(SIRE))){ //Se o sensor estiver ativo e a sirene estiver desligada
       digitalWrite(SIRE, HIGH); //Verifica se recebeu True p/ disparar a Sirene e o Twitter
-      enviaTwitter("Sensor de Fogo disparou!!! Chame o bombeiro! #192");    
+      enviaTwitter("Sensor de Fogo disparou!");    
     }
   }
 }
