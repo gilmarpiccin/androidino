@@ -12,7 +12,7 @@ import com.androidino.R;
 
 public class CadUsuario extends Activity implements View.OnClickListener{
 
-	private Button btnConfirmar;
+	private Button btnConfirmar,btnDeletar;
 	private EditText edtSenha,edtConSenha,edtUsuario;
 	private TextView txtSenha,txtConfSenha,txtUsuario;
 	private WebService ws;
@@ -22,6 +22,8 @@ public class CadUsuario extends Activity implements View.OnClickListener{
 	public void inicializaComponentes(){
 		btnConfirmar = (Button) findViewById(R.id.btnCadConfirmar);
 		btnConfirmar.setOnClickListener(this);
+		btnDeletar = (Button) findViewById(R.id.btnCadDeleta);
+		btnDeletar.setOnClickListener(this);
 		
 		edtUsuario =  (EditText) findViewById(R.id.edtCadUsuario);
 		edtUsuario.setFocusable(true);
@@ -45,7 +47,14 @@ public class CadUsuario extends Activity implements View.OnClickListener{
 	  									,edtConSenha.getText().toString())
 						,this);			
 			break;
-
+			
+		case R.id.btnCadDeleta:
+			if ((edtUsuario.getText().toString().equals(""))) {//se for diferente de vazio
+				ms.showToast("Usuario preceisa ser informado!", this);
+			}
+			else
+			ms.showToast(ws.delUsuario(edtUsuario.getText().toString()),this);
+			
 		default:
 			break;
 		}
@@ -83,6 +92,7 @@ public class CadUsuario extends Activity implements View.OnClickListener{
 			edtConSenha.requestFocus();
 			return txtConfSenha.getText() + " não pode estar vazia!";
 		}
+		
 		//validação dos caracteres 
 		for (int i = 0; i < carcterInvalido.length; i++) {
 			if (Usuario.contains(carcterInvalido[i])){
