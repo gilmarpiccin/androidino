@@ -39,5 +39,6 @@
 	<string name="app_mmInicial">AndroiDino - Menu Inicial</string>
 	<string name="app_mmConf">AndroiDino - Menu Configuração</string>
 
+	<string name="panico">PANICO!</string>
     		
 </resources>

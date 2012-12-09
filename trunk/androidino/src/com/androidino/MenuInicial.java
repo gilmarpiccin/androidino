@@ -2,7 +2,11 @@ package com.androidino;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -10,6 +14,8 @@ import android.widget.ListView;
 public class MenuInicial extends ListActivity {
 	//vetor do MENU
 	String classes[] = {"Sensor","Cad. Usuário","Configurações"};
+	private SharedPreferences preferencia;
+	private WebService ws;
 	
 	@Override
 	public void onBackPressed() {
@@ -26,6 +32,8 @@ public class MenuInicial extends ListActivity {
 						android.R.layout.simple_expandable_list_item_1,
 						classes)//layout interno do android 
 		);
+		preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
+		ws = new WebService(preferencia);
 	}
 	
 	@Override
@@ -49,4 +57,21 @@ public class MenuInicial extends ListActivity {
 		}
 		
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_panico, menu);
+		return true;
+	}
+
+	//Clique do Menu que fica escondido
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.menu_panico:
+				ws.PANICO();
+			}
+			return super.onOptionsItemSelected(item);
+		}
 }
