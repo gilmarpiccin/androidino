@@ -5,6 +5,9 @@ import java.util.regex.Pattern;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -113,5 +116,22 @@ public class Sensor extends Activity implements View.OnClickListener{
 		
 
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_panico, menu);
+		return true;
+	}
+
+	//Clique do Menu que fica escondido
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.menu_panico:
+				ws.PANICO();
+			}
+			return super.onOptionsItemSelected(item);
+		}
 	
 }

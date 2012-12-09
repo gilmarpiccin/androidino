@@ -33,6 +33,12 @@ public class Twitter extends Activity implements View.OnClickListener{
 				 
 				case R.id.btnEnviaToken:
 					String msg = ws.token(edtToken.getText().toString());
+					if (msg.equals("1")) {
+						msg="Gravado com Sucesso!";
+					}
+					else 
+						msg="Envio do Token falhou!";
+						
 					ms.showToast(msg,this);	
 				break;
 				case R.id.btnGerarToken:

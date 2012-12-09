@@ -21,7 +21,8 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
         public static final int ic_launcher__=0x7f020001;
         public static final int ic_menu_set_as=0x7f020002;
-        public static final int img=0x7f020003;
+        public static final int ic_volume=0x7f020003;
+        public static final int img=0x7f020004;
     }
     public static final class id {
         public static final int btnCadConfirmar=0x7f090006;
@@ -43,6 +44,7 @@ public final class R {
         public static final int edtToken=0x7f09001d;
         public static final int edtUsuario=0x7f09000d;
         public static final int menu_ip=0x7f090020;
+        public static final int menu_panico=0x7f090021;
         public static final int tgbFogo=0x7f09001c;
         public static final int tgbGeral=0x7f090018;
         public static final int tgbMovimento=0x7f09001b;
@@ -69,6 +71,7 @@ public final class R {
     }
     public static final class menu {
         public static final int menu_ip=0x7f080000;
+        public static final int menu_panico=0x7f080001;
     }
     public static final class raw {
         public static final int splash=0x7f050000;
@@ -99,6 +102,7 @@ public final class R {
         public static final int gerarToken=0x7f07000d;
         public static final int ligaTodo=0x7f070008;
         public static final int logar=0x7f070003;
+        public static final int panico=0x7f07001f;
         public static final int senha=0x7f070002;
         public static final int sensorFogo=0x7f070006;
         public static final int sensorLegenda=0x7f070004;

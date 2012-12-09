@@ -51,7 +51,10 @@ public class WebService {
 	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?DHT";
 	    	return getRequisicao();
 	    }
-	    
+	    public String PANICO(){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?PANICO";
+	    	return getRequisicao();
+	    }
 	    //Envia a requisção para o Alarme
 	    public String getRequisicao(){
 	        String parserbuilder = "";

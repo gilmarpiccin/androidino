@@ -88,7 +88,9 @@ void loop() {
         else if (sURL.endsWith("=CADUSER")) 
           byOpcao = 8;    
         else if (sURL.endsWith("?SENSOR")) 
-          byOpcao = 9;    
+          byOpcao = 9;
+        else if (sURL.endsWith("?PANICO"))
+          byOpcao = 10;       
 
         //Se for quebra de linha E a linha esta em branco
         if (cAux == '\n' && bLinhaBranco) {
@@ -149,7 +151,8 @@ void loop() {
               client.print(";");
               client.print(OnOFF);
               break;             
-              
+            case 10://estatus dos Sensores
+              digitalWrite(SIRE,!digitalRead(SIRE));
             default: 
               client.print("<h1>Seja Bem Vindo ao Web Server AndroiDino!</h1>");
             }
@@ -175,8 +178,9 @@ void loop() {
 
 void Alarme(){
   if (bOnOffMov){ //Se o sensor estiver ativo 
+  Serial.print("Mov: ");  
   Serial.println(digitalRead(PRES));
-    if ((digitalRead(PRES))&& (!digitalRead(SIRE))){ //se o Sensor de Movimento for aciona e a Sirene esiver desligada.
+    if ((digitalRead(PRES))&& (digitalRead(SIRE)==0)){ //se o Sensor de Movimento for aciona e a Sirene esiver desligada.
       digitalWrite(SIRE, HIGH); 
       enviaTwitter("Sensor de Presença disparou!!");
     }
@@ -186,7 +190,9 @@ void Alarme(){
     pinMode(PRES,INPUT);
   }
   if (bOnOffFogo){ 
-    if ((digitalRead(FOGO)) && (!digitalRead(SIRE))){ //Se o sensor estiver ativo e a sirene estiver desligada
+    Serial.print("Fogo: ");  
+    Serial.println(digitalRead(FOGO));
+    if ((digitalRead(FOGO)) && (digitalRead(SIRE)==0)){ //Se o sensor estiver ativo e a sirene estiver desligada
       digitalWrite(SIRE, HIGH); //Verifica se recebeu True p/ disparar a Sirene e o Twitter
       enviaTwitter("Sensor de Fogo disparou!");    
     }
