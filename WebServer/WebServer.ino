@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <Ethernet.h>
-
+#include <stdio.h>
+#include <string.h>
 byte DHT = 14;
 byte PRES = 15;
 byte FOGO = 16;
@@ -168,21 +169,17 @@ void loop() {
 void Alarme(){
 //digitalWrite(SIRE,digitalRead(PRES));   
 //digitalWrite(SIRE,digitalRead(FOGO));
-  Serial.println(bDisparar);  
-  int randNumero; //Numero randomico
-  char cNumero[] = "";
-  randNumero = random(500);
   if (bOnOffMov){ //Se o sensor estiver ativo 
     if (digitalRead(PRES)){ //Verifica se recebeu True p/ disparar a Sirene e o Twitter
       digitalWrite(SIRE, HIGH); 
-      itoa(randNumero, cNumero, 3);
-      enviaTwitter(strcat(cNumero, "Sensor de Presença disparou!!! Corre Negada!"));
+      Serial.println(digitalRead(PRES));
+      enviaTwitter("Sensor de Presença disparou");
     }
 }
   if (bOnOffFogo){ 
     if (digitalRead(FOGO)){ //Se o sensor estiver ativo 
       digitalWrite(SIRE, HIGH); //Verifica se recebeu True p/ disparar a Sirene e o Twitter
-      enviaTwitter(strcat(cNumero, "Sensor de Fogo disparou!!! Chama o bombeiro!"));    
+      enviaTwitter("Sensor de Fogo disparou!!! Chame o bombeiro! #192");    
     }
   }
 }
