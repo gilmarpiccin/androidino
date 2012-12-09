@@ -21,24 +21,21 @@ void enviaTwitter(char sMsg[]){
     if (twitter.post(sMsg)) {
       int status = twitter.wait(&Serial);
       int randNumero=0;
-      int tentativa=0;
-      while((status != 200) && (tentativa <5)){
         randNumero = random(1000);
-        char str2[140];
+        char str2[140]="";
         sprintf(str2, "%d", randNumero);//coloca o valor int na str2
         strcat(sMsg, str2);//concatena str com str2    
         if (status == 200) {
           Serial.println("OK.");
-          tentativa = 6;
         } else {
           Serial.print("failed : code ");
           Serial.println(status);
-          tentativa++;
         }
-      }
+        free(str2);
     } else {
       Serial.println("connection failed.");
     }
+    free(sMsg);
 }
 
 boolean gravaToken (String sURL){
