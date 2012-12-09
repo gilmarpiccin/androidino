@@ -61,6 +61,12 @@
  	    android:layout_width="fill_parent"
  	    android:layout_height="wrap_content"
  	/>
+ 	<Button
+ 	    android:id="@+id/btnCadDeleta" 
+ 	    android:text="@string/btnCadDeleta"
+ 	    android:layout_width="fill_parent"
+ 	    android:layout_height="wrap_content"
+ 	/>
  	
 </LinearLayout>
  	    

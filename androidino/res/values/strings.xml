@@ -34,6 +34,7 @@
 	<string name="cadSenha">Senha:</string>
 	<string name="cadConfsenha">Confirmar Senha:</string>
 	<string name="btnCadCadastro">Confirmar</string>
+	<string name="btnCadDeleta">Deletar</string>
 	<string name="app_cadastro">AndroiDino - Cadastro Usuário</string>
 
 	<string name="app_mmInicial">AndroiDino - Menu Inicial</string>

@@ -50,3 +50,13 @@ boolean cadUsuario(String sURL){
   return false;
 }
 
+boolean delUsuario(String sURL){
+
+  if ( (sURL.indexOf('?') > 0) && (sURL.indexOf('=') > 0) ){
+    String sUsuario = sURL.substring(sURL.indexOf('?')+1,sURL.indexOf('='));
+    String sArquivo = sUsuario;
+    sArquivo.concat(".txt");
+    return deletaArquivoSD(sArquivo);
+  }else
+  return false;
+}

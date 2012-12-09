@@ -91,7 +91,8 @@ void loop() {
           byOpcao = 9;
         else if (sURL.endsWith("?PANICO"))
           byOpcao = 10;       
-
+        else if (sURL.endsWith("=DELETA"))
+          byOpcao = 11;       
         //Se for quebra de linha E a linha esta em branco
         if (cAux == '\n' && bLinhaBranco) {
 
@@ -151,8 +152,12 @@ void loop() {
               client.print(";");
               client.print(OnOFF);
               break;             
-            case 10://estatus dos Sensores
+            case 10://PANICO
               digitalWrite(SIRE,!digitalRead(SIRE));
+              break;  
+            case 11://DELETA
+             client.print(delUsuario(sURL));
+             break; 
             default: 
               client.print("<h1>Seja Bem Vindo ao Web Server AndroiDino!</h1>");
             }

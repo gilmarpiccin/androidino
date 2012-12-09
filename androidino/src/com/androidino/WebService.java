@@ -51,10 +51,26 @@ public class WebService {
 	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?DHT";
 	    	return getRequisicao();
 	    }
+	    
+	    //função panico
 	    public String PANICO(){
 	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?PANICO";
 	    	return getRequisicao();
 	    }
+	    
+	    //deleta o usuario
+	    public String delUsuario (String prUsuario){
+	    	if (prUsuario.equals(usuario)) {
+				return "Não pode excluir o usuario logado!";
+	    	}
+
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prUsuario+"=DELETA";
+	    	if (trocaRetorno()) {
+	    		return "Usuario excluido com sucesso!";
+	    	}else
+	    		return "Usuário não encontrado ou já excluido!" ;  	
+	    }
+	    
 	    //Envia a requisção para o Alarme
 	    public String getRequisicao(){
 	        String parserbuilder = "";
