@@ -25,7 +25,7 @@
 	<string name="Redbtnconfirmar">Confirmar</string>
 	<string name="app_redesenha">AndroiDino - Redefinir Senha</string>
 	
-	<string name="comuEnderecoIP">IP ou Endereco de rede:</string>
+	<string name="comuEnderecoIP">IP ou Endereço de rede:</string>
 	<string name="comuPorta">Porta:</string>
 	<string name="comuConfirma">Confirmar</string>
 	<string name="app_Comunicacao">AndroiDino - Cadastro IP/PORTA</string>
