@@ -13,7 +13,8 @@ public class Comunicacao extends Activity implements View.OnClickListener{
 	private Mensagem ms;
 	private SharedPreferences preferencia;
 	private WebService ws;
-	
+
+	//evento Click dos componetes da tela
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnConfimarComu:
@@ -27,24 +28,28 @@ public class Comunicacao extends Activity implements View.OnClickListener{
 		
 	}
 
+	//Criação da classe 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.comunicacao);
 		
+		//Instancia dos compoentes da tela
 		btnConfirmar = (Button) findViewById(R.id.btnConfimarComu);
 		btnConfirmar.setOnClickListener(this);
 		edtEndIP = (EditText) findViewById(R.id.edtEnderecoIP);
 		edtPorta = (EditText) findViewById(R.id.edtPorta);
 		
+		//seta informações do arquivo de conf no campos da tela
 		preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
-		edtEndIP.setText(preferencia.getString("IP",""));
+		edtEndIP.setText(preferencia.getString("ip",""));
 		edtPorta.setText(preferencia.getString("porta",""));
 		
 		ws = new WebService(preferencia);
 		ms = new Mensagem();
 	}
 	
+	//Metodo usado para salvar as conf de porta e IP
 	void salvarIPPorta(String IP , String Porta, SharedPreferences pref){
 		SharedPreferences settings = pref;
 		SharedPreferences.Editor editor = settings.edit();

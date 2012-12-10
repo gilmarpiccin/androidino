@@ -22,11 +22,12 @@ public class WebService {
 	    private static final int TIMEOUT_SOCKET = 15000; // 15 segundos
 	    private String IP;
 	    private String porta;
-	    private String senha;
 	    private SharedPreferences serverSettings;
 	    private String url;
 	    private String usuario;
+	    private String senha;
 
+	    //construtor da classe
 	    public WebService(SharedPreferences preferencias) {
 	        atualizaPreferencia(preferencias);
 	    }
@@ -35,9 +36,9 @@ public class WebService {
 	    public void atualizaPreferencia(SharedPreferences settings){
 	    		serverSettings = settings;
 	    		usuario = serverSettings.getString("usuario","");
-	    		senha = serverSettings.getString("senha", "");
-	    		porta = serverSettings.getString("porta", "");
-	    	    IP = serverSettings.getString("ip", "");
+	    		senha 	= serverSettings.getString("senha", "");
+	    		porta 	= serverSettings.getString("porta", "");
+	    	    IP 		= serverSettings.getString("ip", "");
 	    }
 	    
 	    //Envia o novo usuário do para o Alarme
@@ -46,19 +47,7 @@ public class WebService {
 	    		return trocaRetorno();  	
 	    }
 	    
-	    //Solicita ao sensor de Temperatura DHT a Umidade e temperatura do ambiente 
-	    public String DHT(){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?DHT";
-	    	return getRequisicao();
-	    }
-	    
-	    //função panico
-	    public String PANICO(){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?PANICO";
-	    	return getRequisicao();
-	    }
-	    
-	    //deleta o usuario
+	    //Deleta o usuario
 	    public String delUsuario (String prUsuario){
 	    	if (prUsuario.equals(usuario)) {
 				return "Não pode excluir o usuario logado!";
@@ -70,7 +59,61 @@ public class WebService {
 	    	}else
 	    		return "Usuário não encontrado ou já excluido!" ;  	
 	    }
+
+	    //Envia nova senha
+	    public Boolean redefineSenha(String prSenha){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+usuario+"!"+prSenha+"=CADUSER";  	
+	    		return trocaRetorno();
+	    }
+
+	    //Solicita o Login para o Alarme
+	    public Boolean login(String prUsuario, String prSenha){
+	    	this.url = "http://"+IP+":"+porta+"/$"+prUsuario+"&"+prSenha+"?LOGIN";
+	    	return trocaRetorno();
+	    }
 	    
+	    //Solicita ao sensor de Temperatura DHT a Umidade e temperatura do ambiente 
+	    public String DHT(){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?DHT";
+	    	return getRequisicao();
+	    }
+	    
+	    //função panico (dispara sirene)
+	    public String Panico(){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?PANICO";
+	    	return getRequisicao();
+	    }
+   
+	    //Solicita o Status dos Sensores do alarme retorno é uma string separando sensores por ";"
+	    public String Sensor(){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?SENSOR";
+	    	String retorno = getRequisicao();
+	    	//Troca o status 1 ou 0 dos sensores por True ou False
+	    	retorno = retorno.replaceAll("1","true");
+	    	retorno = retorno.replaceAll("0","false");
+	    	return retorno;
+	    }
+	    
+	    //Envia comando para ativar/inativar sensor do alarme
+	    public boolean sensorDigital(String prSensor){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prSensor;
+	    	return trocaRetorno();
+	    }
+	    
+	    //Envia o Token do Twiter para o Alarme
+	    public String token(String sTolken){
+	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+sTolken+"=TOKEN";
+	    	return getRequisicao();
+	    }
+
+	    //Valida o retorno do alarme se for 1 é True se 0 é false
+	    boolean trocaRetorno(){
+	    	if (getRequisicao().equals("1")){
+	    		return true;
+	    	}else
+	    		return false ; 
+	    }
+
 	    //Envia a requisção para o Alarme
 	    public String getRequisicao(){
 	        String parserbuilder = "";
@@ -114,48 +157,4 @@ public class WebService {
 	        parserbuilder = parserbuilder.replaceAll("\n", "");
 	        return parserbuilder;    
 	    }
-	    
-	    //Solicita o Login para o Alarme
-	    public Boolean login(String prUsuario, String prSenha){
-	    	this.url = "http://"+IP+":"+porta+"/$"+prUsuario+"&"+prSenha+"?LOGIN";
-	    	return trocaRetorno();
-	    }
-	    
-	    //Envia nova senha
-	    public Boolean redefineSenha(String prSenha){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+usuario+"!"+prSenha+"=CADUSER";  	
-	    		return trocaRetorno();
-	    }
-	    
-	    //Solicita o Status dos Sensores do alarme retorno é uma string separando sensores por ";"
-	    public String Sensor(){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?SENSOR";
-	    	String retorno = getRequisicao();
-	    	//Troca o status 1 ou 0 dos sensores por True ou False
-	    	retorno = retorno.replaceAll("1","true");
-	    	retorno = retorno.replaceAll("0","false");
-	    	return retorno;
-	    }
-	    
-	    //Envia comando para ativar/inativar sensor do alarme
-	    public boolean sensorDigital(String prSensor){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+prSensor;
-	    	return trocaRetorno();
-	    }
-	    
-	    //Envia o Token do Twiter para o Alarme
-	    public String token(String sTolken){
-	    	this.url = "http://"+IP+":"+porta+"/$"+usuario+"&"+senha+"?"+sTolken+"=TOKEN";
-	    	return getRequisicao();
-	    }
-
-	    //Valida o retorno do alarme se for 1 é True se 0 é false
-	    boolean trocaRetorno(){
-	    	if (getRequisicao().equals("1")){
-	    		return true;
-	    	}else
-	    		return false ; 
-	    }
-	    
-	
 }

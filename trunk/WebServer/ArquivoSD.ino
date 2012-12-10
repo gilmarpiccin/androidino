@@ -117,7 +117,7 @@ boolean deletaArquivoSD(String sArquivo){
   }  
   Serial.println("Deletar arquivo:");
   Serial.println(cArquivo);
-  SD.remove(cArquivo);//Apaga o arquivo para gravar em cima sempre 1 registro
+  SD.remove(cArquivo);//Apaga o arquivo
   return true;
 }
 

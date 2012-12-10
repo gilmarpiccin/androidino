@@ -1,8 +1,7 @@
 /**
-  ServiÃ§o Ethernet
-  Recebe por o resultado da funÃ§Ã£o maintain() que renova o DHCP
+ Ethernet
 **/
-
+//retorna a porta conf no arquivo no cartão SD
 int retornaPorta(){
  int iPorta =8080;
  char cPorta[5] ;

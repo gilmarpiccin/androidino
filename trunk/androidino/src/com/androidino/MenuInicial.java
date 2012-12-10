@@ -70,7 +70,7 @@ public class MenuInicial extends ListActivity {
 		public boolean onOptionsItemSelected(MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.menu_panico:
-				ws.PANICO();
+				ws.Panico();
 			}
 			return super.onOptionsItemSelected(item);
 		}

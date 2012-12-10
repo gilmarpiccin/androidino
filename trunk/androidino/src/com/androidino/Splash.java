@@ -10,15 +10,20 @@ public class Splash extends Activity{
 	//Variável para receber a musica
 	MediaPlayer MinhaMusica;
 	
+	//Criação da classe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 	
-		MinhaMusica = MediaPlayer.create(Splash.this, R.raw.splash);//onde está a musica
+		//Local da musica
+		MinhaMusica = MediaPlayer.create(Splash.this, R.raw.splash);
+		
 		MinhaMusica.start();// executa a musica
+
 		//Thread criada para executar a musica e carregar a aplicação ao mesmo tempo
 		Thread timer = new Thread(){
+			
 			//Implementa o que a thead irá fazer.
 			@Override
 			public void run() {
@@ -37,12 +42,12 @@ public class Splash extends Activity{
 					//fecha o tela 
 					finish();
 					//libera a musica da memória
-					MinhaMusica.release();
-					
+					MinhaMusica.release();					
 				}
 			}
 		};
-		timer. start();// executa a thread
-	 
+
+		// executa a thread
+		timer. start();
 	}
 }
