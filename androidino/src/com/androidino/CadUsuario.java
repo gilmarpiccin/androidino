@@ -19,6 +19,7 @@ public class CadUsuario extends Activity implements View.OnClickListener{
 	private Mensagem ms;
 	private SharedPreferences preferencia;
 	
+	//instancia dos componentes da tela
 	public void inicializaComponentes(){
 		btnConfirmar = (Button) findViewById(R.id.btnCadConfirmar);
 		btnConfirmar.setOnClickListener(this);
@@ -38,6 +39,7 @@ public class CadUsuario extends Activity implements View.OnClickListener{
 		
 	}
 
+	//Click dos botoes
 	public void onClick(View v) {
 		
 		switch (v.getId()) {
@@ -60,10 +62,10 @@ public class CadUsuario extends Activity implements View.OnClickListener{
 		}
 		
 	}
- 
+
+	//Método responsavel pelas conf. inicias  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-	
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.caduser);
 		preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
@@ -72,14 +74,15 @@ public class CadUsuario extends Activity implements View.OnClickListener{
 		inicializaComponentes();	
   	}
 	
+	//Função que valida inf do novo usuário
 	public String validaNovoUser(String Usuario, String Senha, String ConfSenha){
 		String [] carcterInvalido = {"?","&","!","=","$"};
+		
 		//retira os espaços
 		Senha = Senha.trim();
 		ConfSenha = ConfSenha.trim();
 		Usuario = Usuario.trim();
-		
-	
+			
 		if (Usuario.equals("")){
 			edtUsuario.requestFocus();
 			return txtUsuario.getText() + " não pode estar vazio!";
@@ -111,11 +114,15 @@ public class CadUsuario extends Activity implements View.OnClickListener{
 		}
 		
 		
-		//valida se a senha digitada é a mesma da confirmação
+		//valida se a senha digitada esta diferente da confirmação
 		if (!Senha.equals(ConfSenha)){
 			edtConSenha.requestFocus();
 			return "A " + txtConfSenha.getText() + " está diferente do campo: "+ txtSenha.getText();
-		}		
+		}	
+		
+		//valida se o usuário já existe
+		if (ws.login(Usuario, Senha))
+			return "Usuário já existe";
 
 		else if(ws.cadastroUsuario(Usuario,Senha)){
 			finish();

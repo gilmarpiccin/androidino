@@ -16,8 +16,8 @@ public class Twitter extends Activity implements View.OnClickListener{
 		private Mensagem ms;
 		private SharedPreferences preferencia;
 		private WebService ws;
-		
-
+	
+		//Instancia dos componentes da tela
 		public void iniciaComponetes(){
 			edtToken = (EditText) findViewById(R.id.edtToken);
 			btnEnviaToken = (Button) findViewById(R.id.btnEnviaToken);
@@ -26,7 +26,7 @@ public class Twitter extends Activity implements View.OnClickListener{
 			btnGerarToken.setOnClickListener(this);		
 		}
 		
-
+		//Evento Click dos compoentes da tela
 		public void onClick(View v) {
 			
 			switch (v.getId()){
@@ -40,22 +40,25 @@ public class Twitter extends Activity implements View.OnClickListener{
 						msg="Envio do Token falhou!";
 						
 					ms.showToast(msg,this);	
-				break;
+					break;
 				case R.id.btnGerarToken:
-					final WebView pagina = new WebView(this);//(WebView)findViewById(R.id.pagina);
-					//setContentView(pagina);
+					//Instancia Web browser
+					final WebView pagina = new WebView(this);
+										
 					//Habilita o JavaScript nas paginas web
 					pagina.getSettings().setJavaScriptEnabled(true);
 					 
 					//Habilita o zoom nas páginas
 					pagina.getSettings().setSupportZoom(true);
-					//pagina.setScrollContainer(true);
+					
+					//abre a pagina no endereço:
 					pagina.loadUrl("http://arduino-tweet.appspot.com/oauth/twitter/login");
 					
-				break;
+					break;
 			}	
 		}
-		
+
+		//Criaçao da classe
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);

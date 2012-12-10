@@ -12,11 +12,12 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 
 	private Button btnValidaSenha;
 	private EditText edtSenhAtual,edtSenhaNova,edtconfSenha;
-	private Mensagem ms;
-	private SharedPreferences preferencia;
 	private TextView txtSenhaAtual,txtSenhaNova,txtconfSenha;
+	private SharedPreferences preferencia;
 	private WebService ws;
+	private Mensagem ms;
 	
+	//instancia os compenetes da tela
 	public void inicializaComponentes(){
 		btnValidaSenha = (Button) findViewById(R.id.btnRedConfirmar);
 		btnValidaSenha.setOnClickListener(this);
@@ -34,6 +35,7 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 		
 	}
 
+	//Evento click dos compeonetes da tela
 	public void onClick(View v) {
 		
 		switch (v.getId()) {
@@ -50,6 +52,7 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 		
 	}
  
+	//Criação da classe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	
@@ -62,6 +65,7 @@ public class RedefinirSenha extends Activity implements View.OnClickListener{
 	
   	}
 	
+	//método que valida as regras do campo senha
 	public String validaSenha (String SenhaAtual, String SenhaNova, String confSenha){
 		String [] carcterInvalido = {"?","&","!","=","$"};
 		//retira os espaços

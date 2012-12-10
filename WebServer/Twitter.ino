@@ -37,6 +37,7 @@ void enviaTwitter(char sMsg[]){
     }
 }
 
+//grava token do twitter no SD
 boolean gravaToken (String sURL){
   //$dnakjn?GravaTolken
   String sToken = sURL.substring(sURL.indexOf('?')+1,sURL.indexOf("="));

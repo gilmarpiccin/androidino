@@ -2,33 +2,40 @@
 Serviço Login
  */
 
+//valida usuário e senha da URL da requisiçao
 boolean validaLogin(String sAndroid){
   String sAdUsuario,sAdSenha,sArUsuario,sArSenha,sArduino;
-  //Valida os caracteres obrigatÃ³rios
+
+  //Valida os caracteres obrigattórrios
   if ( (sAndroid.indexOf('$') > 0) && (sAndroid.indexOf('&') > 0) && (sAndroid.indexOf('?') > 0) ){
 
+    //Atribui usuário e senha para variáveis
     sAdUsuario = sAndroid.substring(sAndroid.indexOf('$')+1,sAndroid.indexOf('&'));
     Serial.println("\nlendo Usuario Android:");
     Serial.println(sAdUsuario);
+    
     sAdSenha = sAndroid.substring(sAndroid.indexOf('&')+1,sAndroid.indexOf("?"));
     Serial.println("lendo senha Android:");
     Serial.println(sAdSenha);  
 
-    //procura dentro do diretorio User o arquivo com o nome do usuario
+    //procura dentro do SD um arquivo com o nome do usuario
     sArduino = lerArquivoSD(sAdUsuario + ".txt");
 
+    // separa o usuário e a senha do arquivo SD
     sArUsuario = sArduino.substring(0,sArduino.indexOf(';'));
     Serial.println("\nlendo Usuario Arduino:");
     Serial.println(sArUsuario);
+    
     sArSenha = sArduino.substring(sArduino.indexOf(';')+1,sArduino.length());
     Serial.println("lendo senha Arduino:");
     Serial.println(sArSenha);
 
+  //valida se a senha e o usuário enviado é igual ao armazenado no SD
     if ((sAdUsuario == sArUsuario) && (sAdSenha == sArSenha)){
       Serial.println("True");
       return true;
     }
-    else{
+    else{//se for diferente retorno negativo
       Serial.println("False");
       return false;
     }

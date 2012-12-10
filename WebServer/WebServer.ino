@@ -1,37 +1,41 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
+//Portas dos sensores
 byte DHT = 14;
-byte PRES = 15;
+byte MOV = 15;
 byte FOGO = 16;
 byte SIRE = 40;
 
+//status dos Sensore. Iniciam ligados
 boolean OnOFF = true; //Alarme Ligado
 boolean bOnOffMov = false; //Sensor Movimento
-boolean bOnOffFogo = false; //Sensor Fogo
+boolean bOnOffFogo = true; //Sensor Fogo
 
 
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};// MAC do Arduino
+byte mac[] = {
+  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};// MAC do Arduino
 IPAddress ip(192,168,1,177);// IP FIXO
-EthernetServer server(8080);// porta default
+EthernetServer server(8080);// Porta default
 
 void setup() {
   Serial.begin(9600);//Inicia a comunicação Serial
-  
-  while (!Serial) {
-    ; //Fica no laço enquanto não estabelece a comunicação Serial
-  }
 
-  if (!Ethernet.begin(mac))//Usar o DHCP para procurar IP
+  //Fica no laço enquanto não estabelece a comunicação Serial
+  while (!Serial) {
+    ; 
+  }
+  //Usa o DHCP para procurar IP
+  if (!Ethernet.begin(mac))
   {
     Serial.println("Requisição de DHCP falhou.");
+    //Se falhar atribui IP fixo
     Ethernet.begin(mac,ip);
   }
-  
+
   //busca a porta no cartão SD
   EthernetServer server2(retornaPorta());
   server = server2;
-
   delay(1000);
   server.begin();//Iniciando o servidor
   Serial.print("Servidor localizando em: ");
@@ -39,8 +43,8 @@ void setup() {
 
   //Sensor DHT
   iniciaDHT(DHT);
-  //Sensor Presença
-  iniciaSensor(PRES);
+  //Sensor Movimento
+  iniciaSensor(MOV);
   //Sensor fogo
   iniciaSensor(FOGO);
   //inicia sirene
@@ -54,16 +58,17 @@ void setup() {
 }
 
 void loop() {
-  //Varrendo As portas do ALARME 
+  //validando sensores do ALARME 
   if (OnOFF)
     Alarme();
 
-  EthernetClient client = server.available();// Criando um Cliente
+  // Criando um Cliente
+  EthernetClient client = server.available();
   if (client) {
     Serial.println("Novo cliente");
     boolean bLinhaBranco = true; //Solicitação http termina com uma linha em branco
-    String sURL;
-    int byOpcao;
+    String sURL;//URL enciada na requisição
+    int byOpcao;//opção de requisiçãoS
 
     while (client.connected()) {
       if (client.available()) {
@@ -71,6 +76,7 @@ void loop() {
         Serial.write(cAux);
         sURL.concat(cAux);//Concatenando caracter a caracter na String
 
+        //Atribui numero para a requisição
         if (sURL.endsWith("?LOGIN"))
           byOpcao = 1;
         else if (sURL.endsWith("?TWITTER"))
@@ -93,6 +99,7 @@ void loop() {
           byOpcao = 10;       
         else if (sURL.endsWith("=DELETA"))
           byOpcao = 11;       
+          
         //Se for quebra de linha E a linha esta em branco
         if (cAux == '\n' && bLinhaBranco) {
 
@@ -101,14 +108,15 @@ void loop() {
           client.println("Content-Type: text/html");
           client.println("Connnection: close");
           client.println();
-          //Só faz algum comando se o usuário for válido
+          
+          //Só faz algum comando se o usuário for válido (SEGURANÇA)
           if (validaLogin(sURL)){
             switch (byOpcao) {
             case 1://Login
               client.print(true);
               break;
 
-            case 2://posta no twitter
+            case 2:// no twitter
               enviaTwitter("Teste com arduino");//Enviado Mensagem para Twitter
               break;
 
@@ -125,43 +133,51 @@ void loop() {
 
             case 5://Sensor Movimento
               bOnOffMov = !bOnOffMov; //Se igual a False, seta como True e vice-versa
-              client.print(bOnOffMov);
-              digitalWrite(SIRE,LOW);
+              client.print(bOnOffMov);//Retorna a requisição
+              digitalWrite(SIRE,LOW);//Desliga a sirene
               break;
 
             case 6://Sensor Fogo
-              bOnOffFogo = !bOnOffFogo; //Seigual a False, seta como True e vice-versa
-              client.print(bOnOffFogo);
-              digitalWrite(SIRE,LOW);
+              bOnOffFogo = !bOnOffFogo; //Sei gual a False, seta como True e vice-versa
+              client.print(bOnOffFogo);//Retorna a requisição
+              digitalWrite(SIRE,LOW);//desliga a sirene
               break;
 
             case 7:// Liga/desliga Alarme
-              OnOFF= !OnOFF ;      
-              client.print(OnOFF);
-              digitalWrite(SIRE,LOW);
+              OnOFF= !OnOFF ;      //Sei gual a False, seta como True e vice-versa
+              client.print(OnOFF);//Retorna a requisiçao
+              digitalWrite(SIRE,LOW);//desliga a sirene
+              if (OnOFF){//habilita os sensores quando liga o alarme 
+                bOnOffFogo = true;
+                bOnOffMov = true;
+              }                
               break;
 
             case 8://Cadastro usuario
               client.print(cadUsuario(sURL));
               break;
 
-            case 9://estatus dos Sensores
+            case 9://status dos Sensores ()
               client.print(bOnOffMov);
               client.print(";");
               client.print(bOnOffFogo);               
               client.print(";");
               client.print(OnOFF);
               break;             
-            case 10://PANICO
+              
+            case 10://Função PANICO
               digitalWrite(SIRE,!digitalRead(SIRE));
               break;  
-            case 11://DELETA
-             client.print(delUsuario(sURL));
-             break; 
+              
+            case 11://DELETA usuário
+              client.print(delUsuario(sURL));
+              break; 
+              
             default: 
               client.print("<h1>Seja Bem Vindo ao Web Server AndroiDino!</h1>");
             }
-          }else{
+          }
+          else{//Valiação do usuário falhar retorno negativo
             client.print(false);
           }
           //sai da val. que verifica se a URL terminou
@@ -175,7 +191,7 @@ void loop() {
           bLinhaBranco = false;
       }
     }
-    delay(2000);// Da tempo para o browser receber a resposta
+    delay(2000);//tempo para o browser receber a resposta
     client.stop();//desconecta o cliente
     Serial.println("Cliente Desconectado");
   }
@@ -183,18 +199,17 @@ void loop() {
 
 void Alarme(){
   if (bOnOffMov){ //Se o sensor estiver ativo 
-  Serial.print("Mov: ");  
-  Serial.println(digitalRead(PRES));
-    if ((digitalRead(PRES))&& (digitalRead(SIRE)==0)){ //se o Sensor de Movimento for aciona e a Sirene esiver desligada.
+    Serial.print("Mov: ");  //DEBUG
+    Serial.println(digitalRead(MOV));//DEBUG
+    if ((digitalRead(MOV))&& (digitalRead(SIRE)==0)){ //se o Sensor de Movimento for aciona e a Sirene esiver desligada.
       digitalWrite(SIRE, HIGH); 
       enviaTwitter("Sensor de Presença disparou!!");
     }
-    pinMode(PRES,OUTPUT);
-    digitalWrite(PRES,LOW);
-    delay(100);
-    pinMode(PRES,INPUT);
+    //recurso para não travar o alarme
+    pinMode(MOV,OUTPUT);    digitalWrite(MOV,LOW);    delay(100);    pinMode(MOV,INPUT);
   }
-  if (bOnOffFogo){ 
+  
+  if (bOnOffFogo){ //Sensor de Fogo estiver ativado
     Serial.print("Fogo: ");  
     Serial.println(digitalRead(FOGO));
     if ((digitalRead(FOGO)) && (digitalRead(SIRE)==0)){ //Se o sensor estiver ativo e a sirene estiver desligada
@@ -203,6 +218,7 @@ void Alarme(){
     }
   }
 }
+
 
 
 

@@ -33,8 +33,8 @@ int SensorHumidade()
     switch(result)
     {
       case 0: 
-      {
-          Serial.print("Humidade = ");
+      {//debug
+          Serial.print("umidade = ");
           Serial.print(sensorData[0], DEC);
           Serial.print("%  ");
           Serial.print("Temperatura = ");
@@ -48,6 +48,7 @@ int SensorHumidade()
       case -3: Serial.println("Erro de Checksum"); break;
     }
     delay(2000);
+    //Retorna a Umidade
     return sensorData[0];
   }
  return 0;
@@ -55,7 +56,6 @@ int SensorHumidade()
 
 int SensorTemperatura()    
 {
-
   if (digitalRead(byPino))
   {
     // Inicializa o Sensor
@@ -76,13 +76,13 @@ int SensorTemperatura()
     switch(result)
     {
       case 0: 
-      {
-          Serial.print("Humidade = ");
+      {//Debug
+          Serial.print("umidade = ");
           Serial.print(sensorData[0], DEC);
-          Serial.print("%  ");
+          Serial.print(" % ");
           Serial.print("Temperatura = ");
           Serial.print(sensorData[1], DEC);
-          Serial.println("C  ");
+          Serial.println(" C");
           
           break;
       }

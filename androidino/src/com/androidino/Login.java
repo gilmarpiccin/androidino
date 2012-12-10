@@ -30,6 +30,7 @@ public class Login extends Activity implements View.OnClickListener{
 	    edtSenha   = (EditText)findViewById(R.id.edtSenha);
 	}
 	
+	//Evento click dos componestes da tela
 	public void onClick(View v) {
 		ws = new WebService(preferencia);
 		switch (v.getId()){
@@ -61,7 +62,7 @@ public class Login extends Activity implements View.OnClickListener{
 			}
 	}
 
-
+	//Criação da classe
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +72,7 @@ public class Login extends Activity implements View.OnClickListener{
         inicializandoComponentes();
   }
 	
-	//Cria o menu escondido acianado pelo botão menu do cel.
+	//Cria o menu "escondido" acianado pelo botão menu do cel.
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -92,13 +93,16 @@ public class Login extends Activity implements View.OnClickListener{
 			final Button btnConfirmar = (Button)ipRemoto.findViewById(R.id.btnConfimarComu);
 			btnConfirmar.setVisibility(ipRemoto.INVISIBLE);
 			
+			//instacia componetes da tela
 			final EditText edtIP = (EditText) ipRemoto.findViewById(R.id.edtEnderecoIP);
 			final EditText edtPorta = (EditText) ipRemoto.findViewById(R.id.edtPorta);
 			
+			//carrega as conf compartilhas do sistema
 			preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
-			edtIP.setText(preferencia.getString("IP", ""));
+			edtIP.setText(preferencia.getString("ip", ""));
 			edtPorta.setText(preferencia.getString("porta", "8080").toString());	
 
+			//Cria uma tela  Dialog
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			alertDialogBuilder.setView(ipRemoto);
 			alertDialogBuilder.setCancelable(false)

@@ -16,20 +16,36 @@ import android.widget.ToggleButton;
 public class Sensor extends Activity implements View.OnClickListener{
 
 	private Button btnTemperatura;
-	private Mensagem ms;
-	private SharedPreferences preferencia;
 	private ToggleButton tgbGeral, tgbMovimento, tgbfogo;
 	private TextView txtLegenda;
 	private WebService ws;
-		
+	private Mensagem ms;
+	private SharedPreferences preferencia;
+	
+	//criação da classe
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.sensor);
+		inicializaComponentes();
+		preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
+		ws = new WebService(preferencia);
+		ms = new Mensagem();
+		validaSensores();
+	}
+	
+	//instancia compoentes da tela
 	void inicializaComponentes(){
+		
+		//Botão com status
 		tgbGeral = (ToggleButton) findViewById(R.id.tgbGeral);
 		tgbGeral.setOnClickListener(this);
 		tgbMovimento = (ToggleButton) findViewById(R.id.tgbMovimento);
 		tgbMovimento.setOnClickListener(this);
 		tgbfogo = (ToggleButton) findViewById(R.id.tgbFogo);
 		tgbfogo.setOnClickListener(this);
-		
+
+		//botão
 		btnTemperatura = (Button) findViewById(R.id.btnTemperatura);
 		btnTemperatura.setOnClickListener(this);
 		
@@ -37,7 +53,9 @@ public class Sensor extends Activity implements View.OnClickListener{
 		txtLegenda = (TextView) findViewById(R.id.txtSensorLegenda);
 	}
 
+	//Evento click dos componetes
 	public void onClick(View v) {
+		//Retorno para mensagem ao usuário
 		String sLigaDesliga = "";
 		
 		switch (v.getId()) {
@@ -83,17 +101,6 @@ public class Sensor extends Activity implements View.OnClickListener{
 		
 	}
 	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sensor);
-		inicializaComponentes();
-		preferencia = getSharedPreferences("ConfigServidor",MODE_PRIVATE);
-		ws = new WebService(preferencia);
-		ms = new Mensagem();
-		validaSensores();
-	}
-	
 	//valida o retorno do Alarme separando os Sensores
 	void validaSensores(){
 		try {
@@ -104,7 +111,7 @@ public class Sensor extends Activity implements View.OnClickListener{
 			String [] sensor1 = sensor.split (Pattern.quote (";"));  
 			
 			//seta a propriedade "checada" conforme o status do sensor
-			//nesse momento os 0 e 1 já estão alterados para true ou false porem em  modo texto
+			//nesse momento os 0 e 1 já estão alterados para true ou false porém em  modo texto
 			//então deve ser feito a conversão para boolean
 			tgbMovimento.setChecked(Boolean.parseBoolean(sensor1[0]));
 			tgbfogo.setChecked(Boolean.parseBoolean(sensor1[1]));
@@ -116,7 +123,8 @@ public class Sensor extends Activity implements View.OnClickListener{
 		
 
 	}
-	
+
+	//Cria o menu "Escondido" função panico
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -125,13 +133,13 @@ public class Sensor extends Activity implements View.OnClickListener{
 	}
 
 	//Clique do Menu que fica escondido
-		@Override
-		public boolean onOptionsItemSelected(MenuItem item) {
-			switch (item.getItemId()) {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
 			case R.id.menu_panico:
-				ws.PANICO();
+				ws.Panico();
 			}
-			return super.onOptionsItemSelected(item);
-		}
+		return super.onOptionsItemSelected(item);
+	}
 	
 }
