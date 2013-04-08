@@ -1,37 +1,27 @@
 /*
-ServiÃ§o Twitter
+Serviço Twitter
 */
 
-#if defined(ARDUINO) && ARDUINO > 18
-#endif
-#include <Twitter.h>
 
 void enviaTwitter(char sMsg[]){
-  String sToken = lerArquivoSD("twitter.txt");// Lendo Tolken gravado no arquivo twitter.txt
-  int iTamVar= sToken.length();
-  char cToken [iTamVar];
-
-  sToken.toCharArray(cToken,iTamVar);//Converte String para Char
+/*  char cToken [150];
+  lerArquivoSD("twitter.txt").toCharArray(cToken,150);//Le o Aquivo e Converte String para Char
 
   Serial.println(cToken);
-  Twitter twitter(cToken);  
-
-
+  Twitter twitter(cToken);  */
+  Twitter twitter("63860592-pOWE5ipMXcLyV8077glcdTe7oWAXMJjZoC7PjZz6l");  
+  char cAux[20];
+  Tempo().toCharArray(cAux,20);//Converte Strinf para Char
+  Serial.println(strcat(sMsg,cAux));
   Serial.println("connecting ...");
     if (twitter.post(sMsg)) {
       int status = twitter.wait(&Serial);
-//      int randNumero=0;
-  //      randNumero = random(1000);
-//        char str2[140]="";
-     //   sprintf(str2, "%d", randNumero);//coloca o valor int na str2
-//        strcat(sMsg, str2);//concatena str com str2    
-        if (status == 200) {
-          Serial.println("OK.");
-        } else {
-          Serial.print("failed : code ");
-          Serial.println(status);
-        }
-//        free(str2);
+      if (status == 200) {
+        Serial.println("OK.");
+      } else {
+        Serial.print("failed : code ");
+        Serial.println(status);
+      }
     } else {
       Serial.println("connection failed.");
     }
