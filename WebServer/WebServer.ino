@@ -1,5 +1,11 @@
 #include <SPI.h>
 #include <Ethernet.h>
+#include <Wire.h>
+#include "RTClib.h"
+
+#if defined(ARDUINO) && ARDUINO > 18
+#endif
+#include <Twitter.h>
 
 //Portas dos sensores
 byte DHT = 14;
@@ -12,6 +18,8 @@ boolean OnOFF = true; //Alarme Ligado
 boolean bOnOffMov = false; //Sensor Movimento
 boolean bOnOffFogo = true; //Sensor Fogo
 
+//Instancia o relógio
+RTC_DS1307 RTC;
 
 byte mac[] = {
   0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};// MAC do Arduino
@@ -47,9 +55,18 @@ void setup() {
   iniciaSensor(MOV);
   //Sensor fogo
   iniciaSensor(FOGO);
-  //inicia sirene
+
+  //Energiza o Relógio
+  pinMode(18, OUTPUT);
+  digitalWrite(18,LOW);
+  pinMode(19, OUTPUT);
+  digitalWrite(19, HIGH);
+  Wire.begin();
+  RTC.begin();
+  
+  //inicia sirene  
   pinMode(SIRE,OUTPUT);
-  delay(10000);//tempo para estabilizar os sensores
+  delay(1000);//tempo para estabilizar os sensores
   digitalWrite(SIRE,HIGH);
   delay(500);
   digitalWrite(SIRE,LOW);
@@ -203,7 +220,7 @@ void Alarme(){
     Serial.println(digitalRead(MOV));//DEBUG
     if ((digitalRead(MOV))&& (digitalRead(SIRE)==0)){ //se o Sensor de Movimento for aciona e a Sirene esiver desligada.
       digitalWrite(SIRE, HIGH); 
-      enviaTwitter("Sensor de Presença disparou!!");
+      enviaTwitter("Sensor de Presenca disparou!!");
     }
     //recurso para não travar o alarme
     pinMode(MOV,OUTPUT);    digitalWrite(MOV,LOW);    delay(100);    pinMode(MOV,INPUT);
@@ -217,6 +234,8 @@ void Alarme(){
       enviaTwitter("Sensor de Fogo disparou!");    
     }
   }
+  Serial.println(Tempo());
+  delay(1000);
 }
 
 
